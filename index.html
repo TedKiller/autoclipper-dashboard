@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoclipper Live - Relatório de Desempenho (Últimos 5 Dias)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --brand-teal: #14B8A6;
+      --brand-teal-dark: #0F766E;
+      --brand-purple: #8B5CF6;
+      --brand-magenta: #EC4899;
+      --brand-gold: #F59E0B;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --card-border: #E2E8F0;
+      --card-border-accent: #34D399;
+      --text-dark: #0F172A;
+      --text-muted: #64748B;
+      --text-sub: #94A3B8;
+      --red-down: #E11D48;
+      --green-up: #10B981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    /* Top Wavy Gradient Header Area */
+    .top-hero {
+      position: relative;
+      background: linear-gradient(125deg, #020617 0%, #064e3b 40%, #10b981 100%);
+      padding: 24px 32px 140px 32px;
+      overflow: hidden;
+    }
+
+    /* Organic flowing wave shape at bottom */
+    .wave-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      pointer-events: none;
+    }
+
+    .main-wrap {
+      max-width: 1380px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      border-radius: 999px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .logo-img {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .logo-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #14B8A6;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    /* Dropdown Filters (Matching Reference Image) */
+    .filter-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .custom-select-wrap {
+      position: relative;
+    }
+
+    .custom-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: #ffffff;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 999px;
+      padding: 10px 42px 10px 20px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .custom-select:hover, .custom-select:focus {
+      border-color: #10B981;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+    }
+
+    .select-arrow {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      width: 10px;
+      height: 6px;
+      fill: #64748B;
+    }
+
+    /* Category Tags Row (Above Cards) */
+    .category-tags-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    @media (max-width: 1100px) {
+      .category-tags-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .category-tags-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1.5px solid #10B981;
+      color: #064E3B;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 999px;
+      width: fit-content;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+    }
+
+    /* 4 KPI Cards Grid */
+    .kpi-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 1100px) {
+      .kpi-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .kpi-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kpi-card {
+      background: #ffffff;
+      border: 1.5px solid var(--card-border-accent);
+      border-radius: 24px;
+      padding: 22px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 34px rgba(16, 185, 129, 0.15);
+      border-color: #10B981;
+    }
+
+    .kpi-content {
+      flex: 1;
+    }
+
+    .kpi-title {
+      font-size: 0.95rem;
+      color: #64748B;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .kpi-number {
+      font-family: 'Sora', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .kpi-trend {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .trend-down {
+      color: var(--red-down);
+    }
+
+    .trend-up {
+      color: var(--green-up);
+    }
+
+    .kpi-chart-box {
+      width: 110px;
+      height: 110px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .kpi-chart-canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Content Area Below Header */
+    .dashboard-body {
+      max-width: 1380px;
+      margin: -50px auto 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 20;
+    }
+
+    /* Daily Trend Interactive Banner */
+    .trend-interactive-banner {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px 26px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .trend-banner-title h4 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0F172A;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trend-banner-title p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .badge-super-ctr {
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(20, 184, 166, 0.4);
+      color: #0F766E;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .trend-mini-bars {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    .day-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .day-bar-wrap {
+      width: 28px;
+      height: 52px;
+      background: #F1F5F9;
+      border-radius: 6px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .day-bar-fill {
+      width: 100%;
+      background: linear-gradient(180deg, #14B8A6 0%, #0d9488 100%);
+      border-radius: 6px;
+      transition: height 0.6s ease;
+    }
+
+    .day-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Table Section (Matching Reference Style) */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 26px 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      margin-bottom: 30px;
+    }
+
+    .table-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .table-heading {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      background: #ffffff;
+      border: 1px solid #E2E8F0;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead th {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1E293B;
+      padding: 14px 18px;
+      border-bottom: 1.5px solid #CBD5E1;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 16px 18px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 0.92rem;
+      color: #334155;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background-color: #F8FAFC;
+    }
+
+    /* Channel badges matching reference image! */
+    .channel-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .channel-icon-badge {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .channel-tag-pill {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      min-width: 170px;
+    }
+
+    /* Badge colors from reference */
+    .badge-instagram {
+      background: linear-gradient(135deg, #be185d 0%, #db2777 100%);
+    }
+
+    .badge-linkedin-blue {
+      background: #0284c7;
+    }
+
+    .badge-facebook-blue {
+      background: #2563eb;
+    }
+
+    .badge-tiktok-dark {
+      background: #0f172a;
+    }
+
+    /* Highlight values */
+    .val-highlight {
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .val-ctr {
+      color: #0F766E;
+      font-weight: 800;
+      background: rgba(20, 184, 166, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    /* Grand Total Row */
+    .grand-total-row td {
+      font-weight: 800;
+      font-size: 0.98rem;
+      color: #0F172A;
+      border-top: 2px solid #CBD5E1;
+      border-bottom: 2px solid #CBD5E1;
+      background-color: #FAFAFA;
+    }
+
+    /* Pagination Bar (Matching Screenshot) */
+    .table-footer-pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+      color: #64748B;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-page-arrow {
+      border: 1px solid #E2E8F0;
+      background: #ffffff;
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #64748B;
+      transition: background 0.2s;
+    }
+
+    .btn-page-arrow:hover {
+      background: #F1F5F9;
+      color: #0F172A;
+    }
+
+    /* Insights Footer Cards */
+    .client-insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .client-insight-box {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px;
+      position: relative;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+      border-top: 4px solid var(--box-accent, #14B8A6);
+    }
+
+    .client-insight-box h5 {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .client-insight-box p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Hero with Wavy Gradient Background -->
+  <div class="top-hero">
+    <div class="main-wrap">
+
+      <!-- Navigation & Dropdowns (Matching Screenshot) -->
+      <div class="top-nav">
+        <!-- Logo -->
+        <div class="logo-container">
+          <img src="autoclipper-logo.png" alt="Autoclipper" class="logo-img" onerror="this.src='https://autoclipper.live/__l5e/assets-v1/b3affa0e-8016-45ef-bf94-8d7173639ec6/autoclipper-logo.png'">
+          <span class="logo-tag">Meta Ads Live</span>
+        </div>
+
+        <!-- Dropdowns on right -->
+        <div class="filter-pills-row">
+          <!-- Dropdown 1: Source -->
+          <div class="custom-select-wrap">
+            <select class="custom-select" id="dataSourceSelect" onchange="onSourceChange()">
+              <option value="blended">Meta Ads (Blended)</option>
+              <option value="instagram">Instagram Ads</option>
+              <option value="facebook">Facebook Ads</option>
+            </select>
+            <svg class="select-arrow" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="#64748B" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          </div>
+
+          <!-- Dropdown 2: Account -->
+          <div class="custom-select-wrap">
+            <select class="custom-select" id="accountSelect" onchange="onAccountChange()">
+              <option value="act_947122467142147">Autoclipper Live</option>
+              <option value="act_1447492070833917">Douglas Souto (Reserva)</option>
+            </select>
+            <svg class="select-arrow" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="#64748B" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          </div>
+
+          <!-- Dropdown 3: Date Range -->
+          <div class="custom-select-wrap">
+            <select class="custom-select" id="dateRangeSelect" onchange="onDateRangeChange()">
+              <option value="5d" selected>Últimos 5 dias (29/09 - 03/10)</option>
+              <option value="7d">Últimos 7 dias</option>
+              <option value="30d">Últimos 30 dias</option>
+              <option value="all">Histórico Consolidado</option>
+            </select>
+            <svg class="select-arrow" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="#64748B" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Pills Above Cards -->
+      <div class="category-tags-row">
+        <div><span class="category-pill">Investimento</span></div>
+        <div><span class="category-pill">Cliques & Tráfego</span></div>
+        <div><span class="category-pill">Conversão & Leads</span></div>
+        <div><span class="category-pill">Visibilidade</span></div>
+      </div>
+
+      <!-- 4 KPI Cards With Embedded Donut Charts -->
+      <div class="kpi-cards-grid">
+
+        <!-- Card 1: Total Spend -->
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <div class="kpi-title" id="lblCard1">Total investido</div>
+            <div class="kpi-number" id="valCard1">R$ 75,21</div>
+            <div class="kpi-trend trend-down">
+              <span>↓</span> <span>R$ 0,11 / clique</span>
+            </div>
+          </div>
+          <div class="kpi-chart-box">
+            <canvas id="donutChart1" class="kpi-chart-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Card 2: Total Clicks -->
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <div class="kpi-title" id="lblCard2">Cliques no link</div>
+            <div class="kpi-number" id="valCard2">676</div>
+            <div class="kpi-trend trend-up">
+              <span>↑</span> <span>9,31% CTR</span>
+            </div>
+          </div>
+          <div class="kpi-chart-box">
+            <canvas id="donutChart2" class="kpi-chart-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Card 3: Leads -->
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <div class="kpi-title" id="lblCard3">Leads gerados</div>
+            <div class="kpi-number" id="valCard3">16</div>
+            <div class="kpi-trend trend-up">
+              <span>↑</span> <span>R$ 4,70 / lead</span>
+            </div>
+          </div>
+          <div class="kpi-chart-box">
+            <canvas id="donutChart3" class="kpi-chart-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Card 4: Impressions -->
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <div class="kpi-title" id="lblCard4">Impressões</div>
+            <div class="kpi-number" id="valCard4">7.258</div>
+            <div class="kpi-trend trend-down">
+              <span>↓</span> <span>5.529 pessoas</span>
+            </div>
+          </div>
+          <div class="kpi-chart-box">
+            <canvas id="donutChart4" class="kpi-chart-canvas"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Fluid Wave Shape (Bottom of Header) -->
+    <svg class="wave-bottom" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,45 C320,110 580,0 880,50 C1180,95 1320,30 1440,40 L1440,120 L0,120 Z" fill="#F8FAFC"></path>
+    </svg>
+  </div>
+
+  <!-- Dashboard Body Content -->
+  <div class="dashboard-body">
+
+    <!-- Interactive Daily Trend Highlight -->
+    <div class="trend-interactive-banner">
+      <div class="trend-banner-title">
+        <h4>
+          ⚡ Evolução Diária da Campanha Ativa
+          <span class="badge-super-ctr">CTR Médio: 9,31%</span>
+        </h4>
+        <p>Desempenho consolidado dia a dia dos últimos 5 dias na campanha <code>[CPM01] [TRÁFEGO]</code></p>
+      </div>
+
+      <!-- Mini visual bars for the 5 days -->
+      <div class="trend-mini-bars">
+        <div class="day-column">
+          <div class="day-bar-wrap"><div class="day-bar-fill" style="height: 10%;"></div></div>
+          <span class="day-lbl">29/09</span>
+        </div>
+        <div class="day-column">
+          <div class="day-bar-wrap"><div class="day-bar-fill" style="height: 40%;"></div></div>
+          <span class="day-lbl">30/09</span>
+        </div>
+        <div class="day-column">
+          <div class="day-bar-wrap"><div class="day-bar-fill" style="height: 100%;"></div></div>
+          <span class="day-lbl">01/10</span>
+        </div>
+        <div class="day-column">
+          <div class="day-bar-wrap"><div class="day-bar-fill" style="height: 92%;"></div></div>
+          <span class="day-lbl">02/10</span>
+        </div>
+        <div class="day-column">
+          <div class="day-bar-wrap"><div class="day-bar-fill" style="height: 75%;"></div></div>
+          <span class="day-lbl">03/10</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section (Matching Reference Style) -->
+    <div class="table-card">
+      <div class="table-top-bar">
+        <div class="table-heading">Channel performance</div>
+        <div class="table-actions">
+          <button class="btn-action" onclick="exportCSV()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exportar CSV
+          </button>
+          <button class="btn-action" onclick="window.print()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="performanceTable">
+          <thead>
+            <tr>
+              <th style="width: 280px;">Blended Data source name</th>
+              <th>Investimento</th>
+              <th>Impressões</th>
+              <th>Cliques no link</th>
+              <th>Taxa de clique (CTR)</th>
+              <th>CPC médio</th>
+              <th>Leads gerados</th>
+              <th>Custo / Lead</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Row 1: Instagram Reels -->
+            <tr>
+              <td>
+                <div class="channel-cell">
+                  <div class="channel-icon-badge" style="background: rgba(225, 29, 72, 0.1);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#e11d48"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="#fff" stroke-width="2"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#fff" stroke-width="2"/></svg>
+                  </div>
+                  <span class="channel-tag-pill badge-instagram">Instagram Reels</span>
+                </div>
+              </td>
+              <td>R$ 23,55</td>
+              <td class="val-highlight">1.932</td>
+              <td class="val-highlight">202</td>
+              <td><span class="val-ctr">10,46%</span></td>
+              <td>R$ 0,116</td>
+              <td>5</td>
+              <td>R$ 4,71</td>
+            </tr>
+
+            <!-- Row 2: Facebook Reels -->
+            <tr>
+              <td>
+                <div class="channel-cell">
+                  <div class="channel-icon-badge" style="background: rgba(2, 132, 199, 0.1);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#0284c7"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                  </div>
+                  <span class="channel-tag-pill badge-linkedin-blue">Facebook Reels</span>
+                </div>
+              </td>
+              <td>R$ 49,95</td>
+              <td class="val-highlight">5.154</td>
+              <td class="val-highlight">465</td>
+              <td><span class="val-ctr">9,02%</span></td>
+              <td>R$ 0,107</td>
+              <td>11</td>
+              <td>R$ 4,54</td>
+            </tr>
+
+            <!-- Row 3: Facebook Feed & Outros -->
+            <tr>
+              <td>
+                <div class="channel-cell">
+                  <div class="channel-icon-badge" style="background: rgba(37, 99, 235, 0.1);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#2563eb"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                  </div>
+                  <span class="channel-tag-pill badge-facebook-blue">Facebook Feed & Outros</span>
+                </div>
+              </td>
+              <td>R$ 1,51</td>
+              <td class="val-highlight">156</td>
+              <td class="val-highlight">7</td>
+              <td><span class="val-ctr">4,48%</span></td>
+              <td>R$ 0,215</td>
+              <td>0</td>
+              <td>-</td>
+            </tr>
+
+            <!-- Row 4: Instagram Feed & Stories -->
+            <tr>
+              <td>
+                <div class="channel-cell">
+                  <div class="channel-icon-badge" style="background: rgba(15, 23, 42, 0.1);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#0f172a"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="#fff" stroke-width="2"/></svg>
+                  </div>
+                  <span class="channel-tag-pill badge-tiktok-dark">Instagram Feed / Stories</span>
+                </div>
+              </td>
+              <td>R$ 0,20</td>
+              <td class="val-highlight">16</td>
+              <td class="val-highlight">2</td>
+              <td><span class="val-ctr">12,50%</span></td>
+              <td>R$ 0,100</td>
+              <td>0</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+
+          <!-- Grand Total Row -->
+          <tfoot>
+            <tr class="grand-total-row">
+              <td>Grand total</td>
+              <td id="tblTotalSpend">R$ 75,21</td>
+              <td id="tblTotalImpr">7.258</td>
+              <td id="tblTotalClicks">676</td>
+              <td id="tblTotalCtr"><span class="val-ctr">9,31%</span></td>
+              <td id="tblTotalCpc">R$ 0,111</td>
+              <td id="tblTotalLeads">16</td>
+              <td id="tblTotalCpl">R$ 4,70</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Pagination widget at bottom right -->
+      <div class="table-footer-pagination">
+        <span>1 - 4 / 4</span>
+        <div class="pagination-controls">
+          <button class="btn-page-arrow" title="Anterior">‹</button>
+          <button class="btn-page-arrow" title="Próximo">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strategic Insights Grid for Autoclipper -->
+    <div class="client-insights-grid">
+      <div class="client-insight-box" style="--box-accent: #14B8A6;">
+        <h5>💡 Potencial de Escala em Vídeo Vertical</h5>
+        <p>Os canais de <strong>Instagram Reels (CTR 10,46%)</strong> e <strong>Facebook Reels (CTR 9,02%)</strong> concentraram 97% de todo o tráfego gerado. O formato vertical curto do cliente é altamente aderente ao público-alvo de clipadores.</p>
+      </div>
+
+      <div class="client-insight-box" style="--box-accent: #8B5CF6;">
+        <h5>🎯 Custo por Lead Super Baixo (R$ 4,70)</h5>
+        <p>Mesmo sendo uma campanha focada puramente em <strong>Tráfego para o site</strong>, foram convertidos 16 leads qualificados via Pixel/Landing Page, demonstrando excelente taxa de conversão da página inicial do ecossistema.</p>
+      </div>
+
+      <div class="client-insight-box" style="--box-accent: #EC4899;">
+        <h5>🚀 Recomendação para os Próximos 5 Dias</h5>
+        <p>Aumentar o orçamento diário em 20% com foco prioritário em posicionamentos Reels e testar uma variação de criativo direcionada para o cadastro gratuito no <em>The Clippers</em>.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Store complete data models for interactive dropdown switches
+    const DATASETS = {
+      '5d': {
+        card1: { val: 'R$ 75,21', sub: 'R$ 0,11 / clique', trend: 'down', trendVal: '↓' },
+        card2: { val: '676', sub: '9,31% CTR', trend: 'up', trendVal: '↑' },
+        card3: { val: '16', sub: 'R$ 4,70 / lead', trend: 'up', trendVal: '↑' },
+        card4: { val: '7.258', sub: '5.529 pessoas', trend: 'down', trendVal: '↓' },
+        chart1: [49.95, 23.55, 1.71], // FB Reels, IG Reels, Outros
+        chart2: [465, 202, 9],
+        chart3: [16, 84],
+        chart4: [76, 24],
+        tableTotal: { spend: 'R$ 75,21', impr: '7.258', clicks: '676', ctr: '9,31%', cpc: 'R$ 0,111', leads: '16', cpl: 'R$ 4,70' }
+      },
+      '7d': {
+        card1: { val: 'R$ 75,21', sub: 'R$ 0,11 / clique', trend: 'down', trendVal: '↓' },
+        card2: { val: '676', sub: '9,31% CTR', trend: 'up', trendVal: '↑' },
+        card3: { val: '16', sub: 'R$ 4,70 / lead', trend: 'up', trendVal: '↑' },
+        card4: { val: '7.258', sub: '5.529 alcance', trend: 'down', trendVal: '↓' },
+        chart1: [51.46, 23.75, 0],
+        chart2: [472, 204, 0],
+        chart3: [16, 84],
+        chart4: [76, 24],
+        tableTotal: { spend: 'R$ 75,21', impr: '7.258', clicks: '676', ctr: '9,31%', cpc: 'R$ 0,111', leads: '16', cpl: 'R$ 4,70' }
+      },
+      '30d': {
+        card1: { val: 'R$ 75,21', sub: 'R$ 0,11 / clique', trend: 'down', trendVal: '↓' },
+        card2: { val: '676', sub: '9,31% CTR', trend: 'up', trendVal: '↑' },
+        card3: { val: '16', sub: 'R$ 4,70 / lead', trend: 'up', trendVal: '↑' },
+        card4: { val: '7.258', sub: '5.529 pessoas', trend: 'down', trendVal: '↓' },
+        chart1: [51.46, 23.75, 0],
+        chart2: [472, 204, 0],
+        chart3: [16, 84],
+        chart4: [76, 24],
+        tableTotal: { spend: 'R$ 75,21', impr: '7.258', clicks: '676', ctr: '9,31%', cpc: 'R$ 0,111', leads: '16', cpl: 'R$ 4,70' }
+      },
+      'all': {
+        card1: { val: 'R$ 4.823,66', sub: 'R$ 0,97 / clique', trend: 'down', trendVal: '↓' },
+        card2: { val: '4.984', sub: '1,32% CTR Médio', trend: 'up', trendVal: '↑' },
+        card3: { val: '494', sub: 'R$ 9,76 / lead', trend: 'up', trendVal: '↑' },
+        card4: { val: '376.895', sub: '208.410 pessoas', trend: 'down', trendVal: '↓' },
+        chart1: [1294, 893, 757, 700, 524, 655],
+        chart2: [1435, 1011, 935, 386, 310, 907],
+        chart3: [494, 506],
+        chart4: [55, 45],
+        tableTotal: { spend: 'R$ 4.823,66', impr: '376.895', clicks: '4.984', ctr: '1,32%', cpc: 'R$ 0,97', leads: '494', cpl: 'R$ 9,76' }
+      }
+    };
+
+    // Shared Donut Chart Configuration Helper
+    function createMiniDonut(canvasId, data, colors) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      return new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: data,
+            backgroundColor: colors,
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '72%',
+          plugins: {
+            tooltip: { enabled: true },
+            legend: { display: false }
+          },
+          animation: {
+            duration: 1000,
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+    }
+
+    // Initialize 4 Donut Charts (Matching Colors from Reference Image)
+    // Reference Image: Colors are Berry/Magenta, Royal Purple, Bright Teal/Cyan
+    const donut1 = createMiniDonut('donutChart1', [66, 31, 3], ['#be185d', '#0284c7', '#f59e0b']);
+    const donut2 = createMiniDonut('donutChart2', [68, 30, 2], ['#0284c7', '#be185d', '#10b981']);
+    const donut3 = createMiniDonut('donutChart3', [16, 84], ['#be185d', '#7c3aed']);
+    const donut4 = createMiniDonut('donutChart4', [76, 24], ['#be185d', '#0284c7']);
+
+    // Dropdown Change Handler
+    function onDateRangeChange() {
+      const selected = document.getElementById('dateRangeSelect').value;
+      const data = DATASETS[selected] || DATASETS['5d'];
+
+      // Update KPI Cards
+      document.getElementById('valCard1').innerText = data.card1.val;
+      document.querySelector('#valCard1 + .kpi-trend span:last-child').innerText = data.card1.sub;
+
+      document.getElementById('valCard2').innerText = data.card2.val;
+      document.querySelector('#valCard2 + .kpi-trend span:last-child').innerText = data.card2.sub;
+
+      document.getElementById('valCard3').innerText = data.card3.val;
+      document.querySelector('#valCard3 + .kpi-trend span:last-child').innerText = data.card3.sub;
+
+      document.getElementById('valCard4').innerText = data.card4.val;
+      document.querySelector('#valCard4 + .kpi-trend span:last-child').innerText = data.card4.sub;
+
+      // Update Charts
+      donut1.data.datasets[0].data = data.chart1;
+      donut1.update();
+
+      donut2.data.datasets[0].data = data.chart2;
+      donut2.update();
+
+      donut3.data.datasets[0].data = data.chart3;
+      donut3.update();
+
+      donut4.data.datasets[0].data = data.chart4;
+      donut4.update();
+
+      // Update Grand Total in Table
+      document.getElementById('tblTotalSpend').innerText = data.tableTotal.spend;
+      document.getElementById('tblTotalImpr').innerText = data.tableTotal.impr;
+      document.getElementById('tblTotalClicks').innerText = data.tableTotal.clicks;
+      document.getElementById('tblTotalCtr').innerHTML = `<span class="val-ctr">${data.tableTotal.ctr}</span>`;
+      document.getElementById('tblTotalCpc').innerText = data.tableTotal.cpc;
+      document.getElementById('tblTotalLeads').innerText = data.tableTotal.leads;
+      document.getElementById('tblTotalCpl').innerText = data.tableTotal.cpl;
+    }
+
+    function onSourceChange() {
+      const source = document.getElementById('dataSourceSelect').value;
+      const rows = document.querySelectorAll('#tableBody tr');
+      if (source === 'instagram') {
+        rows[0].style.display = '';
+        rows[1].style.display = 'none';
+        rows[2].style.display = 'none';
+        rows[3].style.display = '';
+      } else if (source === 'facebook') {
+        rows[0].style.display = 'none';
+        rows[1].style.display = '';
+        rows[2].style.display = '';
+        rows[3].style.display = 'none';
+      } else {
+        rows.forEach(r => r.style.display = '');
+      }
+    }
+
+    function onAccountChange() {
+      const acc = document.getElementById('accountSelect').value;
+      if (acc === 'act_1447492070833917') {
+        alert('A conta "Douglas Souto" é uma conta recém-criada sem campanhas ativas. Exibindo os dados da conta principal Autoclipper Live.');
+        document.getElementById('accountSelect').value = 'act_947122467142147';
+      }
+    }
+
+    function exportCSV() {
+      const rows = [
+        ['Canal', 'Investimento', 'Impressoes', 'Cliques', 'CTR', 'CPC', 'Leads', 'CPL'],
+        ['Instagram Reels', 'R$ 23,55', '1932', '202', '10.46%', 'R$ 0,116', '5', 'R$ 4,71'],
+        ['Facebook Reels', 'R$ 49,95', '5154', '465', '9.02%', 'R$ 0,107', '11', 'R$ 4,54'],
+        ['Facebook Feed e Outros', 'R$ 1,51', '156', '7', '4.48%', 'R$ 0,215', '0', '-'],
+        ['Instagram Feed e Stories', 'R$ 0,20', '16', '2', '12.50%', 'R$ 0,100', '0', '-'],
+        ['Total Consolidado', 'R$ 75,21', '7258', '676', '9.31%', 'R$ 0,111', '16', 'R$ 4,70']
+      ];
+      let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(";")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "Autoclipper_Meta_Ads_Ultimos_5_Dias.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+
+</body>
+</html>
