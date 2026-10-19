@@ -576,6 +576,13 @@
       color: var(--text-muted);
       line-height: 1.6;
     }
+    .live-status { display:inline-flex; align-items:center; gap:8px; margin-left:8px; font-size:0.78rem; font-weight:700; color:#0F766E; }
+    .live-dot { width:9px; height:9px; border-radius:50%; background:#10B981; box-shadow:0 0 0 0 rgba(16,185,129,.6); animation:livePulse 1.8s infinite; }
+    .live-status.stale { color:#B45309; }
+    .live-status.stale .live-dot { background:#F59E0B; animation:none; }
+    .live-status.error { color:#BE123C; }
+    .live-status.error .live-dot { background:#E11D48; animation:none; }
+    @keyframes livePulse { 70% { box-shadow:0 0 0 9px rgba(16,185,129,0); } 100% { box-shadow:0 0 0 0 rgba(16,185,129,0); } }
   </style>
 </head>
 <body>
@@ -590,6 +597,7 @@
         <div class="logo-container">
           <img src="autoclipper-logo.png" alt="Autoclipper" class="logo-img" onerror="this.src='https://autoclipper.live/__l5e/assets-v1/b3affa0e-8016-45ef-bf94-8d7173639ec6/autoclipper-logo.png'">
           <span class="logo-tag">Meta Ads Live</span>
+          <span class="live-status" id="liveStatus"><span class="live-dot"></span><span id="liveText">Carregando…</span></span>
         </div>
 
         <!-- Dropdowns on right -->
@@ -711,13 +719,13 @@
       <div class="trend-banner-title">
         <h4>
           ⚡ Evolução Diária da Campanha Ativa
-          <span class="badge-super-ctr">CTR Médio: 9,31%</span>
+          <span class="badge-super-ctr" id="bannerCtr">CTR Médio: –</span>
         </h4>
         <p>Desempenho consolidado dia a dia dos últimos 5 dias na campanha <code>[CPM01] [TRÁFEGO]</code></p>
       </div>
 
       <!-- Mini visual bars for the 5 days -->
-      <div class="trend-mini-bars">
+      <div class="trend-mini-bars" id="dayBars">
         <div class="day-column">
           <div class="day-bar-wrap"><div class="day-bar-fill" style="height: 10%;"></div></div>
           <span class="day-lbl">29/09</span>
@@ -771,7 +779,7 @@
               <th>Custo / Lead</th>
             </tr>
           </thead>
-          <tbody id="tableBody">
+          <tbody id="tableBody" data-dynamic="true">
             <!-- Row 1: Instagram Reels -->
             <tr>
               <td>
@@ -867,7 +875,7 @@
 
       <!-- Pagination widget at bottom right -->
       <div class="table-footer-pagination">
-        <span>1 - 4 / 4</span>
+        <span id="pageInfo">–</span>
         <div class="pagination-controls">
           <button class="btn-page-arrow" title="Anterior">‹</button>
           <button class="btn-page-arrow" title="Próximo">›</button>
@@ -876,7 +884,7 @@
     </div>
 
     <!-- Strategic Insights Grid for Autoclipper -->
-    <div class="client-insights-grid">
+    <div class="client-insights-grid" id="insightsGrid">
       <div class="client-insight-box" style="--box-accent: #14B8A6;">
         <h5>💡 Potencial de Escala em Vídeo Vertical</h5>
         <p>Os canais de <strong>Instagram Reels (CTR 10,46%)</strong> e <strong>Facebook Reels (CTR 9,02%)</strong> concentraram 97% de todo o tráfego gerado. O formato vertical curto do cliente é altamente aderente ao público-alvo de clipadores.</p>
@@ -896,175 +904,189 @@
   </div>
 
   <script>
-    // Store complete data models for interactive dropdown switches
-    const DATASETS = {
-      '5d': {
-        card1: { val: 'R$ 75,21', sub: 'R$ 0,11 / clique', trend: 'down', trendVal: '↓' },
-        card2: { val: '676', sub: '9,31% CTR', trend: 'up', trendVal: '↑' },
-        card3: { val: '16', sub: 'R$ 4,70 / lead', trend: 'up', trendVal: '↑' },
-        card4: { val: '7.258', sub: '5.529 pessoas', trend: 'down', trendVal: '↓' },
-        chart1: [49.95, 23.55, 1.71], // FB Reels, IG Reels, Outros
-        chart2: [465, 202, 9],
-        chart3: [16, 84],
-        chart4: [76, 24],
-        tableTotal: { spend: 'R$ 75,21', impr: '7.258', clicks: '676', ctr: '9,31%', cpc: 'R$ 0,111', leads: '16', cpl: 'R$ 4,70' }
-      },
-      '7d': {
-        card1: { val: 'R$ 75,21', sub: 'R$ 0,11 / clique', trend: 'down', trendVal: '↓' },
-        card2: { val: '676', sub: '9,31% CTR', trend: 'up', trendVal: '↑' },
-        card3: { val: '16', sub: 'R$ 4,70 / lead', trend: 'up', trendVal: '↑' },
-        card4: { val: '7.258', sub: '5.529 alcance', trend: 'down', trendVal: '↓' },
-        chart1: [51.46, 23.75, 0],
-        chart2: [472, 204, 0],
-        chart3: [16, 84],
-        chart4: [76, 24],
-        tableTotal: { spend: 'R$ 75,21', impr: '7.258', clicks: '676', ctr: '9,31%', cpc: 'R$ 0,111', leads: '16', cpl: 'R$ 4,70' }
-      },
-      '30d': {
-        card1: { val: 'R$ 75,21', sub: 'R$ 0,11 / clique', trend: 'down', trendVal: '↓' },
-        card2: { val: '676', sub: '9,31% CTR', trend: 'up', trendVal: '↑' },
-        card3: { val: '16', sub: 'R$ 4,70 / lead', trend: 'up', trendVal: '↑' },
-        card4: { val: '7.258', sub: '5.529 pessoas', trend: 'down', trendVal: '↓' },
-        chart1: [51.46, 23.75, 0],
-        chart2: [472, 204, 0],
-        chart3: [16, 84],
-        chart4: [76, 24],
-        tableTotal: { spend: 'R$ 75,21', impr: '7.258', clicks: '676', ctr: '9,31%', cpc: 'R$ 0,111', leads: '16', cpl: 'R$ 4,70' }
-      },
-      'all': {
-        card1: { val: 'R$ 4.823,66', sub: 'R$ 0,97 / clique', trend: 'down', trendVal: '↓' },
-        card2: { val: '4.984', sub: '1,32% CTR Médio', trend: 'up', trendVal: '↑' },
-        card3: { val: '494', sub: 'R$ 9,76 / lead', trend: 'up', trendVal: '↑' },
-        card4: { val: '376.895', sub: '208.410 pessoas', trend: 'down', trendVal: '↓' },
-        chart1: [1294, 893, 757, 700, 524, 655],
-        chart2: [1435, 1011, 935, 386, 310, 907],
-        chart3: [494, 506],
-        chart4: [55, 45],
-        tableTotal: { spend: 'R$ 4.823,66', impr: '376.895', clicks: '4.984', ctr: '1,32%', cpc: 'R$ 0,97', leads: '494', cpl: 'R$ 9,76' }
-      }
-    };
+    const REFRESH_MS = 60000;      // atualiza a cada 60s
+    const STALE_MIN = 30;          // aviso se data.json ficar velho
+    let DB = null;
+    let rowsCache = [];
 
-    // Shared Donut Chart Configuration Helper
+    const brl = (v, d = 2) => 'R$ ' + (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    const int = v => Math.round(v || 0).toLocaleString('pt-BR');
+    const pct = v => (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+    const div = (a, b) => b ? a / b : 0;
+
     function createMiniDonut(canvasId, data, colors) {
-      const ctx = document.getElementById(canvasId).getContext('2d');
-      return new Chart(ctx, {
+      return new Chart(document.getElementById(canvasId).getContext('2d'), {
         type: 'doughnut',
-        data: {
-          datasets: [{
-            data: data,
-            backgroundColor: colors,
-            borderWidth: 0,
-            hoverOffset: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: '72%',
-          plugins: {
-            tooltip: { enabled: true },
-            legend: { display: false }
-          },
-          animation: {
-            duration: 1000,
-            easing: 'easeOutQuart'
-          }
-        }
+        data: { datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '72%',
+          plugins: { tooltip: { enabled: true }, legend: { display: false } },
+          animation: { duration: 600, easing: 'easeOutQuart' } }
       });
     }
+    const donut1 = createMiniDonut('donutChart1', [1], ['#E2E8F0']);
+    const donut2 = createMiniDonut('donutChart2', [1], ['#E2E8F0']);
+    const donut3 = createMiniDonut('donutChart3', [1], ['#E2E8F0']);
+    const donut4 = createMiniDonut('donutChart4', [1], ['#E2E8F0']);
+    const PALETTE = ['#be185d', '#0284c7', '#f59e0b', '#10b981', '#7c3aed', '#64748b'];
 
-    // Initialize 4 Donut Charts (Matching Colors from Reference Image)
-    // Reference Image: Colors are Berry/Magenta, Royal Purple, Bright Teal/Cyan
-    const donut1 = createMiniDonut('donutChart1', [66, 31, 3], ['#be185d', '#0284c7', '#f59e0b']);
-    const donut2 = createMiniDonut('donutChart2', [68, 30, 2], ['#0284c7', '#be185d', '#10b981']);
-    const donut3 = createMiniDonut('donutChart3', [16, 84], ['#be185d', '#7c3aed']);
-    const donut4 = createMiniDonut('donutChart4', [76, 24], ['#be185d', '#0284c7']);
-
-    // Dropdown Change Handler
-    function onDateRangeChange() {
-      const selected = document.getElementById('dateRangeSelect').value;
-      const data = DATASETS[selected] || DATASETS['5d'];
-
-      // Update KPI Cards
-      document.getElementById('valCard1').innerText = data.card1.val;
-      document.querySelector('#valCard1 + .kpi-trend span:last-child').innerText = data.card1.sub;
-
-      document.getElementById('valCard2').innerText = data.card2.val;
-      document.querySelector('#valCard2 + .kpi-trend span:last-child').innerText = data.card2.sub;
-
-      document.getElementById('valCard3').innerText = data.card3.val;
-      document.querySelector('#valCard3 + .kpi-trend span:last-child').innerText = data.card3.sub;
-
-      document.getElementById('valCard4').innerText = data.card4.val;
-      document.querySelector('#valCard4 + .kpi-trend span:last-child').innerText = data.card4.sub;
-
-      // Update Charts
-      donut1.data.datasets[0].data = data.chart1;
-      donut1.update();
-
-      donut2.data.datasets[0].data = data.chart2;
-      donut2.update();
-
-      donut3.data.datasets[0].data = data.chart3;
-      donut3.update();
-
-      donut4.data.datasets[0].data = data.chart4;
-      donut4.update();
-
-      // Update Grand Total in Table
-      document.getElementById('tblTotalSpend').innerText = data.tableTotal.spend;
-      document.getElementById('tblTotalImpr').innerText = data.tableTotal.impr;
-      document.getElementById('tblTotalClicks').innerText = data.tableTotal.clicks;
-      document.getElementById('tblTotalCtr').innerHTML = `<span class="val-ctr">${data.tableTotal.ctr}</span>`;
-      document.getElementById('tblTotalCpc').innerText = data.tableTotal.cpc;
-      document.getElementById('tblTotalLeads').innerText = data.tableTotal.leads;
-      document.getElementById('tblTotalCpl').innerText = data.tableTotal.cpl;
+    function groupLabel(p) {
+      const reels = (p.position || '').includes('reels');
+      if (p.platform === 'instagram') return reels ? 'Instagram Reels' : 'Instagram Feed / Stories';
+      if (p.platform === 'facebook') return reels ? 'Facebook Reels' : 'Facebook Feed & Outros';
+      return 'Outros (' + (p.platform || 'n/d') + ')';
+    }
+    function badgeClass(label) {
+      if (label.startsWith('Instagram Reels')) return 'badge-instagram';
+      if (label.startsWith('Facebook Reels')) return 'badge-linkedin-blue';
+      if (label.startsWith('Facebook')) return 'badge-facebook-blue';
+      return 'badge-tiktok-dark';
+    }
+    function iconFor(label) {
+      const ig = label.startsWith('Instagram');
+      const color = ig ? '#e11d48' : '#2563eb';
+      const svg = ig
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="${color}"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="#fff" stroke-width="2"/></svg>`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="${color}"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`;
+      return `<div class="channel-icon-badge" style="background:${color}1a;">${svg}</div>`;
     }
 
-    function onSourceChange() {
+    function aggregate(rangeData, source) {
+      const map = {};
+      rangeData.placements.forEach(p => {
+        if (source !== 'blended' && p.platform !== source) return;
+        const k = groupLabel(p);
+        const m = map[k] || (map[k] = { label: k, spend: 0, impressions: 0, clicks: 0, leads: 0, reach: 0 });
+        m.spend += p.spend; m.impressions += p.impressions; m.clicks += p.clicks; m.leads += p.leads; m.reach += p.reach;
+      });
+      return Object.values(map).sort((a, b) => b.spend - a.spend);
+    }
+
+    function setStatus(cls, text) {
+      const el = document.getElementById('liveStatus');
+      el.className = 'live-status ' + cls;
+      document.getElementById('liveText').textContent = text;
+    }
+    function updateStatusText() {
+      if (!DB) return;
+      const min = Math.floor((Date.now() - new Date(DB.updated_at).getTime()) / 60000);
+      const ago = min < 1 ? 'agora há pouco' : `há ${min} min`;
+      setStatus(min > STALE_MIN ? 'stale' : '', (min > STALE_MIN ? 'Dados desatualizados • ' : 'Ao vivo • ') + 'atualizado ' + ago);
+    }
+
+    function render() {
+      if (!DB) return;
+      const accId = document.getElementById('accountSelect').value;
+      const acc = DB.accounts[accId] || Object.values(DB.accounts)[0];
+      const rangeKey = document.getElementById('dateRangeSelect').value;
       const source = document.getElementById('dataSourceSelect').value;
-      const rows = document.querySelectorAll('#tableBody tr');
-      if (source === 'instagram') {
-        rows[0].style.display = '';
-        rows[1].style.display = 'none';
-        rows[2].style.display = 'none';
-        rows[3].style.display = '';
-      } else if (source === 'facebook') {
-        rows[0].style.display = 'none';
-        rows[1].style.display = '';
-        rows[2].style.display = '';
-        rows[3].style.display = 'none';
-      } else {
-        rows.forEach(r => r.style.display = '');
+      const r = acc.ranges[rangeKey] || acc.ranges['5d'];
+
+      // rótulo do período
+      const opt = document.querySelector(`#dateRangeSelect option[value="${rangeKey}"]`);
+      if (r.daily.length && rangeKey !== 'all') {
+        const f = d => d.slice(8, 10) + '/' + d.slice(5, 7);
+        const labels = { '5d': 'Últimos 5 dias', '7d': 'Últimos 7 dias', '30d': 'Últimos 30 dias' };
+        opt.textContent = `${labels[rangeKey]} (${f(r.daily[0].date)} - ${f(r.daily[r.daily.length - 1].date)})`;
+      }
+
+      rowsCache = aggregate(r, source);
+      const t = rowsCache.reduce((a, x) => ({ spend: a.spend + x.spend, impressions: a.impressions + x.impressions, clicks: a.clicks + x.clicks, leads: a.leads + x.leads, reach: a.reach + x.reach }), { spend: 0, impressions: 0, clicks: 0, leads: 0, reach: 0 });
+      if (source === 'blended') t.reach = r.total.reach || t.reach;
+      const ctr = div(t.clicks, t.impressions) * 100;
+
+      // KPI cards
+      const setCard = (n, val, sub) => {
+        document.getElementById('valCard' + n).innerText = val;
+        document.querySelector(`#valCard${n} + .kpi-trend span:last-child`).innerText = sub;
+      };
+      setCard(1, brl(t.spend), brl(div(t.spend, t.clicks), 2) + ' / clique');
+      setCard(2, int(t.clicks), pct(ctr) + ' CTR');
+      setCard(3, int(t.leads), t.leads ? brl(div(t.spend, t.leads)) + ' / lead' : 'sem leads');
+      setCard(4, int(t.impressions), int(t.reach) + ' pessoas');
+
+      // donuts
+      const setDonut = (d, data, colors) => {
+        const ok = data.some(v => v > 0);
+        d.data.datasets[0].data = ok ? data : [1];
+        d.data.datasets[0].backgroundColor = ok ? colors : ['#E2E8F0'];
+        d.update();
+      };
+      setDonut(donut1, rowsCache.map(x => +x.spend.toFixed(2)), PALETTE);
+      setDonut(donut2, rowsCache.map(x => x.clicks), PALETTE);
+      setDonut(donut3, [t.leads, Math.max(t.clicks - t.leads, 0)], ['#be185d', '#7c3aed']);
+      setDonut(donut4, rowsCache.map(x => x.impressions), PALETTE);
+
+      // tabela
+      const body = document.getElementById('tableBody');
+      body.innerHTML = rowsCache.length ? rowsCache.map(x => `<tr>
+        <td><div class="channel-cell">${iconFor(x.label)}<span class="channel-tag-pill ${badgeClass(x.label)}">${x.label}</span></div></td>
+        <td>${brl(x.spend)}</td>
+        <td class="val-highlight">${int(x.impressions)}</td>
+        <td class="val-highlight">${int(x.clicks)}</td>
+        <td><span class="val-ctr">${pct(div(x.clicks, x.impressions) * 100)}</span></td>
+        <td>${brl(div(x.spend, x.clicks), 3)}</td>
+        <td>${int(x.leads)}</td>
+        <td>${x.leads ? brl(div(x.spend, x.leads)) : '-'}</td></tr>`).join('')
+        : '<tr><td colspan="8" style="text-align:center;color:#64748B;padding:24px;">Sem dados para este filtro.</td></tr>';
+      document.getElementById('tblTotalSpend').innerText = brl(t.spend);
+      document.getElementById('tblTotalImpr').innerText = int(t.impressions);
+      document.getElementById('tblTotalClicks').innerText = int(t.clicks);
+      document.getElementById('tblTotalCtr').innerHTML = `<span class="val-ctr">${pct(ctr)}</span>`;
+      document.getElementById('tblTotalCpc').innerText = brl(div(t.spend, t.clicks), 3);
+      document.getElementById('tblTotalLeads').innerText = int(t.leads);
+      document.getElementById('tblTotalCpl').innerText = t.leads ? brl(div(t.spend, t.leads)) : '-';
+      document.getElementById('pageInfo').innerText = rowsCache.length ? `1 - ${rowsCache.length} / ${rowsCache.length}` : '0 / 0';
+
+      // banner diário
+      document.getElementById('bannerCtr').innerText = 'CTR Médio: ' + pct(ctr);
+      const max = Math.max(...r.daily.map(d => d.clicks), 1);
+      document.getElementById('dayBars').innerHTML = r.daily.slice(-14).map(d =>
+        `<div class="day-column" title="${int(d.clicks)} cliques • ${brl(d.spend)}"><div class="day-bar-wrap"><div class="day-bar-fill" style="height:${Math.max(div(d.clicks, max) * 100, 4)}%;"></div></div><span class="day-lbl">${d.date.slice(8, 10)}/${d.date.slice(5, 7)}</span></div>`).join('');
+
+      // insights gerados dos dados
+      const top = [...rowsCache].sort((a, b) => b.clicks - a.clicks)[0];
+      const share = top ? div(top.clicks, t.clicks) * 100 : 0;
+      const box = (c, h, p) => `<div class="client-insight-box" style="--box-accent:${c};"><h5>${h}</h5><p>${p}</p></div>`;
+      document.getElementById('insightsGrid').innerHTML = top ? [
+        box('#14B8A6', '💡 Canal de maior tração', `<strong>${top.label}</strong> gerou ${pct(share)} dos cliques, com CTR de <strong>${pct(div(top.clicks, top.impressions) * 100)}</strong>.`),
+        box('#8B5CF6', `🎯 Custo por Lead ${t.leads ? '(' + brl(div(t.spend, t.leads)) + ')' : ''}`, t.leads ? `Foram gerados <strong>${int(t.leads)} leads</strong> com investimento de ${brl(t.spend)} no período selecionado.` : 'Nenhum lead registrado no período selecionado.'),
+        box('#EC4899', '🚀 Sugestão', `Priorize orçamento em <strong>${top.label}</strong> e compare o CPC médio (${brl(div(t.spend, t.clicks), 3)}) com os demais posicionamentos.`)
+      ].join('') : '';
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error(res.status);
+        DB = await res.json();
+        // preenche contas disponíveis
+        const sel = document.getElementById('accountSelect');
+        const cur = sel.value;
+        sel.innerHTML = Object.entries(DB.accounts).map(([id, a]) => `<option value="${id}">${a.name}</option>`).join('');
+        if (DB.accounts[cur]) sel.value = cur;
+        render();
+        updateStatusText();
+      } catch (e) {
+        setStatus('error', 'Sem conexão com os dados • tentando novamente');
       }
     }
 
-    function onAccountChange() {
-      const acc = document.getElementById('accountSelect').value;
-      if (acc === 'act_1447492070833917') {
-        alert('A conta "Douglas Souto" é uma conta recém-criada sem campanhas ativas. Exibindo os dados da conta principal Autoclipper Live.');
-        document.getElementById('accountSelect').value = 'act_947122467142147';
-      }
-    }
+    const onDateRangeChange = render, onSourceChange = render, onAccountChange = render;
 
     function exportCSV() {
-      const rows = [
-        ['Canal', 'Investimento', 'Impressoes', 'Cliques', 'CTR', 'CPC', 'Leads', 'CPL'],
-        ['Instagram Reels', 'R$ 23,55', '1932', '202', '10.46%', 'R$ 0,116', '5', 'R$ 4,71'],
-        ['Facebook Reels', 'R$ 49,95', '5154', '465', '9.02%', 'R$ 0,107', '11', 'R$ 4,54'],
-        ['Facebook Feed e Outros', 'R$ 1,51', '156', '7', '4.48%', 'R$ 0,215', '0', '-'],
-        ['Instagram Feed e Stories', 'R$ 0,20', '16', '2', '12.50%', 'R$ 0,100', '0', '-'],
-        ['Total Consolidado', 'R$ 75,21', '7258', '676', '9.31%', 'R$ 0,111', '16', 'R$ 4,70']
-      ];
-      let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(";")).join("\n");
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "Autoclipper_Meta_Ads_Ultimos_5_Dias.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const head = ['Canal', 'Investimento', 'Impressoes', 'Cliques', 'CTR', 'CPC', 'Leads', 'CPL'];
+      const lines = rowsCache.map(x => [x.label, x.spend.toFixed(2), x.impressions, x.clicks, (div(x.clicks, x.impressions) * 100).toFixed(2) + '%', div(x.spend, x.clicks).toFixed(3), x.leads, x.leads ? div(x.spend, x.leads).toFixed(2) : '-']);
+      const csv = [head, ...lines].map(l => l.join(';')).join('\n');
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+      link.download = 'Autoclipper_Meta_Ads_' + document.getElementById('dateRangeSelect').value + '.csv';
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
+
+    load();
+    setInterval(load, REFRESH_MS);
+    setInterval(updateStatusText, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
   </script>
 
 </body>
