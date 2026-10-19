@@ -1,0 +1,32 @@
+{
+  "updated_at": "2026-10-19T09:00:00Z",
+  "accounts": {
+    "act_947122467142147": {
+      "name": "Autoclipper Live",
+      "ranges": {
+        "5d": {
+          "total": {
+            "spend": 75.21,
+            "impressions": 7258000,
+            "reach": 0,
+            "clicks": 676,
+            "leads": 16
+          },
+          "placements": [],
+          "daily": []
+        },
+        "7d": {
+          "total": {
+            "spend": 120.5,
+            "impressions": 12000000,
+            "reach": 0,
+            "clicks": 950,
+            "leads": 22
+          },
+          "placements": [],
+          "daily": []
+        }
+      }
+    }
+  }
+}
