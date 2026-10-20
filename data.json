@@ -1,38 +1,38 @@
 {
-  "updated_at": "2026-10-20T11:25:39.415412+00:00",
+  "updated_at": "2026-10-20T12:04:40.398111+00:00",
   "accounts": {
     "act_947122467142147": {
       "name": "Autoclipper Live",
       "ranges": {
         "5d": {
           "total": {
-            "spend": 255.45,
-            "impressions": 42375,
-            "reach": 21601,
-            "clicks": 6244,
+            "spend": 257.12,
+            "impressions": 42540,
+            "reach": 21694,
+            "clicks": 6271,
             "leads": 1
           },
           "placements": [
             {
-              "spend": 92.271709,
-              "impressions": 17363,
-              "reach": 9272,
-              "clicks": 2366,
+              "spend": 92.804313,
+              "impressions": 17419,
+              "reach": 9287,
+              "clicks": 2374,
               "leads": 0,
               "platform": "audience_network",
               "position": "an_classic"
             },
             {
-              "spend": 160.51391,
-              "impressions": 21069,
-              "reach": 10741,
-              "clicks": 3750,
+              "spend": 161.647802,
+              "impressions": 21154,
+              "reach": 10806,
+              "clicks": 3769,
               "leads": 1,
               "platform": "audience_network",
               "position": "rewarded_video"
             },
             {
-              "spend": 0.010016,
+              "spend": 0.01003,
               "impressions": 6,
               "reach": 5,
               "clicks": 0,
@@ -41,25 +41,25 @@
               "position": "facebook_profile_feed"
             },
             {
-              "spend": 0.761252,
-              "impressions": 704,
-              "reach": 350,
+              "spend": 0.762253,
+              "impressions": 708,
+              "reach": 352,
               "clicks": 36,
               "leads": 0,
               "platform": "facebook",
               "position": "facebook_reels"
             },
             {
-              "spend": 0.410675,
-              "impressions": 211,
-              "reach": 144,
+              "spend": 0.411215,
+              "impressions": 212,
+              "reach": 145,
               "clicks": 9,
               "leads": 0,
               "platform": "facebook",
               "position": "facebook_stories"
             },
             {
-              "spend": 0.330543,
+              "spend": 0.330978,
               "impressions": 102,
               "reach": 80,
               "clicks": 10,
@@ -68,7 +68,7 @@
               "position": "feed"
             },
             {
-              "spend": 0.17028,
+              "spend": 0.170504,
               "impressions": 67,
               "reach": 63,
               "clicks": 7,
@@ -77,7 +77,7 @@
               "position": "instream_video"
             },
             {
-              "spend": 0.040066,
+              "spend": 0.040119,
               "impressions": 72,
               "reach": 60,
               "clicks": 2,
@@ -86,8 +86,8 @@
               "position": "marketplace"
             },
             {
-              "spend": 0.010016,
-              "impressions": 311,
+              "spend": 0.01003,
+              "impressions": 313,
               "reach": 241,
               "clicks": 6,
               "leads": 0,
@@ -95,8 +95,8 @@
               "position": "search"
             },
             {
-              "spend": 0.240395,
-              "impressions": 279,
+              "spend": 0.240712,
+              "impressions": 281,
               "reach": 210,
               "clicks": 11,
               "leads": 0,
@@ -104,16 +104,16 @@
               "position": "feed"
             },
             {
-              "spend": 0.540889,
-              "impressions": 1974,
-              "reach": 1341,
+              "spend": 0.541601,
+              "impressions": 1989,
+              "reach": 1345,
               "clicks": 37,
               "leads": 0,
               "platform": "instagram",
               "position": "instagram_reels"
             },
             {
-              "spend": 0.070115,
+              "spend": 0.070208,
               "impressions": 177,
               "reach": 132,
               "clicks": 4,
@@ -122,7 +122,7 @@
               "position": "instagram_stories"
             },
             {
-              "spend": 0.080132,
+              "spend": 0.080237,
               "impressions": 39,
               "reach": 36,
               "clicks": 6,
@@ -174,10 +174,10 @@
               "date": "2026-10-19"
             },
             {
-              "spend": 22.21,
-              "impressions": 2671,
-              "reach": 1746,
-              "clicks": 455,
+              "spend": 23.88,
+              "impressions": 2836,
+              "reach": 1820,
+              "clicks": 482,
               "leads": 0,
               "date": "2026-10-20"
             }
@@ -185,33 +185,33 @@
         },
         "7d": {
           "total": {
-            "spend": 330.79,
-            "impressions": 52646,
-            "reach": 26124,
-            "clicks": 8032,
+            "spend": 332.46,
+            "impressions": 52811,
+            "reach": 26145,
+            "clicks": 8059,
             "leads": 1
           },
           "placements": [
             {
-              "spend": 121.113777,
-              "impressions": 21710,
-              "reach": 11293,
-              "clicks": 3099,
+              "spend": 121.648086,
+              "impressions": 21767,
+              "reach": 11299,
+              "clicks": 3107,
               "leads": 0,
               "platform": "audience_network",
               "position": "an_classic"
             },
             {
-              "spend": 206.221837,
-              "impressions": 26186,
-              "reach": 13056,
-              "clicks": 4764,
+              "spend": 207.354009,
+              "impressions": 26273,
+              "reach": 13115,
+              "clicks": 4783,
               "leads": 1,
               "platform": "audience_network",
               "position": "rewarded_video"
             },
             {
-              "spend": 0.010013,
+              "spend": 0.010023,
               "impressions": 7,
               "reach": 6,
               "clicks": 0,
@@ -220,25 +220,25 @@
               "position": "facebook_profile_feed"
             },
             {
-              "spend": 0.791004,
-              "impressions": 751,
-              "reach": 377,
+              "spend": 0.79181,
+              "impressions": 755,
+              "reach": 378,
               "clicks": 37,
               "leads": 0,
               "platform": "facebook",
               "position": "facebook_reels"
             },
             {
-              "spend": 0.440559,
-              "impressions": 221,
-              "reach": 152,
+              "spend": 0.441008,
+              "impressions": 222,
+              "reach": 153,
               "clicks": 11,
               "leads": 0,
               "platform": "facebook",
               "position": "facebook_stories"
             },
             {
-              "spend": 0.410521,
+              "spend": 0.410939,
               "impressions": 134,
               "reach": 104,
               "clicks": 10,
@@ -247,7 +247,7 @@
               "position": "feed"
             },
             {
-              "spend": 0.70089,
+              "spend": 0.701604,
               "impressions": 272,
               "reach": 258,
               "clicks": 31,
@@ -256,7 +256,7 @@
               "position": "instream_video"
             },
             {
-              "spend": 0.060076,
+              "spend": 0.060137,
               "impressions": 119,
               "reach": 88,
               "clicks": 5,
@@ -265,8 +265,8 @@
               "position": "marketplace"
             },
             {
-              "spend": 0.010013,
-              "impressions": 320,
+              "spend": 0.010023,
+              "impressions": 321,
               "reach": 248,
               "clicks": 6,
               "leads": 0,
@@ -274,8 +274,8 @@
               "position": "search"
             },
             {
-              "spend": 0.250318,
-              "impressions": 341,
+              "spend": 0.250573,
+              "impressions": 342,
               "reach": 263,
               "clicks": 14,
               "leads": 0,
@@ -283,16 +283,16 @@
               "position": "feed"
             },
             {
-              "spend": 0.600763,
-              "impressions": 2310,
-              "reach": 1550,
+              "spend": 0.601375,
+              "impressions": 2324,
+              "reach": 1554,
               "clicks": 42,
               "leads": 0,
               "platform": "instagram",
               "position": "instagram_reels"
             },
             {
-              "spend": 0.070089,
+              "spend": 0.07016,
               "impressions": 210,
               "reach": 155,
               "clicks": 4,
@@ -301,7 +301,7 @@
               "position": "instagram_stories"
             },
             {
-              "spend": 0.11014,
+              "spend": 0.110252,
               "impressions": 64,
               "reach": 60,
               "clicks": 9,
@@ -369,10 +369,10 @@
               "date": "2026-10-19"
             },
             {
-              "spend": 22.21,
-              "impressions": 2671,
-              "reach": 1746,
-              "clicks": 455,
+              "spend": 23.88,
+              "impressions": 2836,
+              "reach": 1820,
+              "clicks": 482,
               "leads": 0,
               "date": "2026-10-20"
             }
@@ -380,33 +380,33 @@
         },
         "30d": {
           "total": {
-            "spend": 695.93,
-            "impressions": 92529,
-            "reach": 47284,
-            "clicks": 14082,
+            "spend": 697.6,
+            "impressions": 92694,
+            "reach": 47313,
+            "clicks": 14109,
             "leads": 51
           },
           "placements": [
             {
-              "spend": 168.521704,
-              "impressions": 28069,
-              "reach": 13518,
-              "clicks": 4548,
+              "spend": 169.014132,
+              "impressions": 28123,
+              "reach": 13527,
+              "clicks": 4556,
               "leads": 0,
               "platform": "audience_network",
               "position": "an_classic"
             },
             {
-              "spend": 309.066524,
-              "impressions": 36558,
-              "reach": 17248,
-              "clicks": 7143,
+              "spend": 310.13788,
+              "impressions": 36641,
+              "reach": 17265,
+              "clicks": 7162,
               "leads": 4,
               "platform": "audience_network",
               "position": "rewarded_video"
             },
             {
-              "spend": 0.040024,
+              "spend": 0.040044,
               "impressions": 8,
               "reach": 7,
               "clicks": 1,
@@ -415,8 +415,8 @@
               "position": "facebook_profile_feed"
             },
             {
-              "spend": 131.799542,
-              "impressions": 15703,
+              "spend": 131.863659,
+              "impressions": 15712,
               "reach": 9954,
               "clicks": 1452,
               "leads": 0,
@@ -424,16 +424,16 @@
               "position": "facebook_reels"
             },
             {
-              "spend": 0.670405,
-              "impressions": 265,
-              "reach": 189,
+              "spend": 0.670731,
+              "impressions": 266,
+              "reach": 190,
               "clicks": 12,
               "leads": 0,
               "platform": "facebook",
               "position": "facebook_stories"
             },
             {
-              "spend": 2.661606,
+              "spend": 2.662901,
               "impressions": 359,
               "reach": 298,
               "clicks": 30,
@@ -442,7 +442,7 @@
               "position": "feed"
             },
             {
-              "spend": 1.711033,
+              "spend": 1.711865,
               "impressions": 530,
               "reach": 497,
               "clicks": 48,
@@ -451,7 +451,7 @@
               "position": "instream_video"
             },
             {
-              "spend": 0.340205,
+              "spend": 0.340371,
               "impressions": 216,
               "reach": 154,
               "clicks": 5,
@@ -460,8 +460,8 @@
               "position": "marketplace"
             },
             {
-              "spend": 0.020012,
-              "impressions": 391,
+              "spend": 0.020022,
+              "impressions": 392,
               "reach": 309,
               "clicks": 8,
               "leads": 0,
@@ -469,8 +469,8 @@
               "position": "search"
             },
             {
-              "spend": 0.550332,
-              "impressions": 395,
+              "spend": 0.5506,
+              "impressions": 396,
               "reach": 313,
               "clicks": 17,
               "leads": 0,
@@ -478,8 +478,8 @@
               "position": "feed"
             },
             {
-              "spend": 79.988274,
-              "impressions": 9488,
+              "spend": 80.027186,
+              "impressions": 9504,
               "reach": 6567,
               "clicks": 791,
               "leads": 47,
@@ -487,7 +487,7 @@
               "position": "instagram_reels"
             },
             {
-              "spend": 0.070042,
+              "spend": 0.070076,
               "impressions": 213,
               "reach": 158,
               "clicks": 4,
@@ -496,7 +496,7 @@
               "position": "instagram_stories"
             },
             {
-              "spend": 0.490296,
+              "spend": 0.490534,
               "impressions": 191,
               "reach": 172,
               "clicks": 21,
@@ -676,10 +676,10 @@
               "date": "2026-10-19"
             },
             {
-              "spend": 22.21,
-              "impressions": 2671,
-              "reach": 1746,
-              "clicks": 455,
+              "spend": 23.88,
+              "impressions": 2836,
+              "reach": 1820,
+              "clicks": 482,
               "leads": 0,
               "date": "2026-10-20"
             }
@@ -687,33 +687,33 @@
         },
         "all": {
           "total": {
-            "spend": 5444.43,
-            "impressions": 462172,
-            "reach": 254655,
-            "clicks": 17419,
+            "spend": 5446.1,
+            "impressions": 462337,
+            "reach": 255320,
+            "clicks": 17446,
             "leads": 529
           },
           "placements": [
             {
-              "spend": 170.219081,
-              "impressions": 28129,
+              "spend": 170.639819,
+              "impressions": 28176,
               "reach": 0,
-              "clicks": 4567,
+              "clicks": 4575,
               "leads": 0,
               "platform": "audience_network",
               "position": "an_classic"
             },
             {
-              "spend": 310.191218,
-              "impressions": 36592,
+              "spend": 311.130835,
+              "impressions": 36665,
               "reach": 0,
-              "clicks": 7161,
+              "clicks": 7180,
               "leads": 4,
               "platform": "audience_network",
               "position": "rewarded_video"
             },
             {
-              "spend": 0.8702,
+              "spend": 0.870254,
               "impressions": 21,
               "reach": 0,
               "clicks": 1,
@@ -722,7 +722,7 @@
               "position": "facebook_notification"
             },
             {
-              "spend": 4.92113,
+              "spend": 4.921437,
               "impressions": 343,
               "reach": 0,
               "clicks": 1,
@@ -731,8 +731,8 @@
               "position": "facebook_profile_feed"
             },
             {
-              "spend": 336.587278,
-              "impressions": 25008,
+              "spend": 336.608273,
+              "impressions": 25014,
               "reach": 0,
               "clicks": 1538,
               "leads": 10,
@@ -740,7 +740,7 @@
               "position": "facebook_reels"
             },
             {
-              "spend": 0.300069,
+              "spend": 0.300088,
               "impressions": 35,
               "reach": 0,
               "clicks": 0,
@@ -749,8 +749,8 @@
               "position": "facebook_reels_overlay"
             },
             {
-              "spend": 163.827614,
-              "impressions": 5293,
+              "spend": 163.837833,
+              "impressions": 5294,
               "reach": 0,
               "clicks": 78,
               "leads": 1,
@@ -758,8 +758,8 @@
               "position": "facebook_stories"
             },
             {
-              "spend": 691.458754,
-              "impressions": 30256,
+              "spend": 691.501885,
+              "impressions": 30258,
               "reach": 0,
               "clicks": 281,
               "leads": 24,
@@ -767,7 +767,7 @@
               "position": "feed"
             },
             {
-              "spend": 47.090812,
+              "spend": 47.093749,
               "impressions": 4228,
               "reach": 0,
               "clicks": 105,
@@ -776,7 +776,7 @@
               "position": "instream_video"
             },
             {
-              "spend": 14.083233,
+              "spend": 14.084112,
               "impressions": 3085,
               "reach": 0,
               "clicks": 11,
@@ -785,8 +785,8 @@
               "position": "marketplace"
             },
             {
-              "spend": 0.680156,
-              "impressions": 452,
+              "spend": 0.680199,
+              "impressions": 453,
               "reach": 0,
               "clicks": 8,
               "leads": 0,
@@ -794,7 +794,7 @@
               "position": "search"
             },
             {
-              "spend": 0.040009,
+              "spend": 0.040012,
               "impressions": 18,
               "reach": 0,
               "clicks": 0,
@@ -803,8 +803,8 @@
               "position": "video_feeds"
             },
             {
-              "spend": 1005.340819,
-              "impressions": 27164,
+              "spend": 1005.40353,
+              "impressions": 27166,
               "reach": 0,
               "clicks": 352,
               "leads": 58,
@@ -812,8 +812,8 @@
               "position": "feed"
             },
             {
-              "spend": 5.091169,
-              "impressions": 4508,
+              "spend": 5.091486,
+              "impressions": 4509,
               "reach": 0,
               "clicks": 3,
               "leads": 0,
@@ -821,7 +821,7 @@
               "position": "instagram_explore"
             },
             {
-              "spend": 0.560129,
+              "spend": 0.560164,
               "impressions": 83,
               "reach": 0,
               "clicks": 0,
@@ -830,7 +830,7 @@
               "position": "instagram_explore_grid_home"
             },
             {
-              "spend": 0.380087,
+              "spend": 0.380111,
               "impressions": 497,
               "reach": 0,
               "clicks": 0,
@@ -839,8 +839,8 @@
               "position": "instagram_profile_feed"
             },
             {
-              "spend": 903.997551,
-              "impressions": 91804,
+              "spend": 904.05394,
+              "impressions": 91823,
               "reach": 0,
               "clicks": 1212,
               "leads": 131,
@@ -848,8 +848,8 @@
               "position": "instagram_reels"
             },
             {
-              "spend": 1788.220562,
-              "impressions": 204321,
+              "spend": 1788.332107,
+              "impressions": 204334,
               "reach": 0,
               "clicks": 2078,
               "leads": 296,
@@ -857,7 +857,7 @@
               "position": "instagram_stories"
             },
             {
-              "spend": 0.570131,
+              "spend": 0.570166,
               "impressions": 192,
               "reach": 0,
               "clicks": 21,
