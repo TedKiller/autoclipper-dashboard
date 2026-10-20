@@ -32,8 +32,10 @@ def get_data(endpoint, params=None):
     resp = requests.get(f"{BASE_URL}/{endpoint}", params=params, timeout=60)
     body = resp.json()
     if "error" in body:
-        print(f"AVISO: {endpoint}: {body['error'].get('message')}")
-        return []
+        msg = body["error"].get("message")
+        print(f"ERRO Meta API ({endpoint}): {msg}")
+        print("Token do Meta expirado/invalido? Gere um novo e atualize o secret META_ACCESS_TOKEN.")
+        sys.exit(1)  # nao sobrescreve data.json com zeros
     return body.get("data", [])
 
 
