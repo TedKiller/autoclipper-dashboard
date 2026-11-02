@@ -3,140 +3,396 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Óptica Monte Alegre · Painel Gerencial</title>
+<title>Óptica Monte Alegre · Sistema Integrado</title>
 <style>
   :root{--navy:#0b2545;--green:#13795b;--green2:#1fb58a;--bg:#f3f6fa;--line:#e4eaf2;--muted:#64748b;--text:#0f1e36;--red:#dc2626;--amber:#d97706}
   *{box-sizing:border-box;margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif}
-  body{background:var(--bg);color:var(--text);display:flex;min-height:100vh}
-  aside{width:240px;background:linear-gradient(180deg,var(--navy),#0d3b3a);color:#fff;padding:24px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
-  .brand{display:flex;align-items:center;gap:10px;padding:0 8px 24px;border-bottom:1px solid rgba(255,255,255,.12)}
+  body{background:var(--bg);color:var(--text)}
+  #app{display:none;min-height:100vh}
+  #app.on{display:flex}
+  aside{width:250px;background:linear-gradient(180deg,var(--navy),#0d3b3a);color:#fff;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow:auto}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px 20px;border-bottom:1px solid rgba(255,255,255,.12)}
   .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--green),var(--green2));display:grid;place-items:center;font-size:20px}
   .brand b{display:block;font-size:15px}.brand small{opacity:.65;font-size:11px}
-  nav{margin-top:20px;display:flex;flex-direction:column;gap:4px}
-  nav button{display:flex;align-items:center;gap:12px;background:none;border:0;color:rgba(255,255,255,.75);padding:11px 12px;border-radius:10px;cursor:pointer;font-size:14px;text-align:left;transition:.15s}
+  nav{margin-top:16px;display:flex;flex-direction:column;gap:3px}
+  nav button{display:flex;align-items:center;gap:12px;background:none;border:0;color:rgba(255,255,255,.75);padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;text-align:left;transition:.15s}
   nav button:hover{background:rgba(255,255,255,.08);color:#fff}
   nav button.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--green2)}
-  .side-foot{margin-top:auto;font-size:11px;opacity:.6;padding:0 8px;line-height:1.5}
+  .side-foot{margin-top:auto;font-size:11px;opacity:.6;padding:14px 8px 0;line-height:1.5}
   .content{flex:1;min-width:0}
-  .top{background:#fff;border-bottom:1px solid var(--line);padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+  .top{background:#fff;border-bottom:1px solid var(--line);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5;gap:12px}
   .top h1{font-size:20px}.top p{font-size:12px;color:var(--muted);margin-top:2px}
-  .pill{font-size:12px;background:#e7f6f0;color:var(--green);padding:6px 12px;border-radius:20px;font-weight:600}
-  main{padding:28px 32px;max-width:1200px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(15,30,54,.05);display:flex;gap:14px;align-items:center}
-  .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:#e7f6f0}
+  .user{display:flex;align-items:center;gap:10px;font-size:13px}
+  .pill{font-size:12px;background:#e7f6f0;color:var(--green);padding:6px 12px;border-radius:20px;font-weight:600;white-space:nowrap}
+  .linkbtn{background:none;border:1px solid var(--line);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--muted)}
+  main{padding:26px 32px;max-width:1250px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 1px 3px rgba(15,30,54,.05);display:flex;gap:14px;align-items:center}
+  .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:21px;background:#e7f6f0}
   .card.warn .ico{background:#fef3c7}.card.blue .ico{background:#e0ecff}.card.dark .ico{background:#e5e9f0}
-  .card small{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-  .card b{display:block;font-size:24px;margin-top:2px}
-  .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 1px 3px rgba(15,30,54,.05);display:none}
-  .panel.on{display:block}
+  .card small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+  .card b{display:block;font-size:22px;margin-top:2px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 1px 3px rgba(15,30,54,.05)}
   .panel h3{font-size:16px}.panel .sub{color:var(--muted);font-size:13px;margin:2px 0 14px}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
   .grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
-  @media(max-width:900px){aside{display:none}.grid2{grid-template-columns:1fr}main,.top{padding:16px}}
+  .grid3{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:900px){aside{display:none}.grid2,.grid3{grid-template-columns:1fr}main,.top{padding:16px}}
   .chart{display:flex;align-items:flex-end;gap:14px;height:200px;padding:10px 4px 0;border-bottom:1px solid var(--line)}
   .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
-  .bar{width:100%;max-width:60px;background:linear-gradient(180deg,var(--green2),var(--green));border-radius:8px 8px 0 0;transition:.3s}
-  .bar:hover{filter:brightness(1.1)}
+  .bar{width:100%;max-width:60px;background:linear-gradient(180deg,var(--green2),var(--green));border-radius:8px 8px 0 0}
   .col em{font-style:normal;font-size:11px;color:var(--muted);margin-bottom:4px}
   .labels{display:flex;gap:14px;padding:6px 4px;font-size:12px;color:var(--muted)}.labels span{flex:1;text-align:center}
-  table{width:100%;border-collapse:collapse;font-size:14px}
-  th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 12px;background:#f8fafc;border-bottom:1px solid var(--line)}
-  td{padding:12px;border-bottom:1px solid var(--line)}
+  .tw{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 12px;background:#f8fafc;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:11px 12px;border-bottom:1px solid var(--line)}
   tr:hover td{background:#fafcff}
-  .tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-  .tag.ok{background:#dcfce7;color:#166534}.tag.low{background:#fee2e2;color:var(--red)}
-  .empty{color:var(--muted);text-align:center;padding:24px}
-  form{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:14px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;align-items:center}
-  input,select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;background:#fff;outline:none}
-  input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(19,121,91,.15)}
-  label{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
-  .btn{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:0;padding:10px 20px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px}
+  .tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .tag.ok{background:#dcfce7;color:#166534}.tag.low{background:#fee2e2;color:var(--red)}.tag.wait{background:#fef3c7;color:#92400e}.tag.info{background:#e0ecff;color:#1d4ed8}
+  .empty{color:var(--muted);text-align:center;padding:22px}
+  form.f{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:14px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;align-items:center}
+  input,select,textarea{padding:9px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;background:#fff;outline:none;font-family:inherit}
+  input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(19,121,91,.15)}
+  label.ck{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+  .fl{display:flex;flex-direction:column;font-size:11px;color:var(--muted);gap:3px}
+  .btn{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:0;padding:9px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13.5px}
   .btn:hover{filter:brightness(1.08)}
-  footer{padding:20px 32px 32px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);margin-top:10px;line-height:1.6}
+  .btn.sec{background:#fff;color:var(--green);border:1px solid var(--green)}
+  .btn.sm{padding:5px 12px;font-size:12px}
+  .btn.danger{background:#fff;color:var(--red);border:1px solid var(--red)}
+  footer{padding:20px 32px 32px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);line-height:1.6}
   footer a{color:var(--green);text-decoration:none;font-weight:600}
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none;z-index:50}
   .toast.show{opacity:1;transform:none}
+  pre{background:#0b1b33;color:#cfe8ff;padding:14px;border-radius:12px;font-size:12.5px;overflow:auto;max-height:340px;white-space:pre-wrap;word-break:break-all}
+  code{background:#eef2f7;padding:2px 6px;border-radius:6px;font-size:12.5px}
+  .modal{position:fixed;inset:0;background:rgba(10,20,40,.55);display:none;place-items:center;z-index:40;padding:20px}
+  .modal.on{display:grid}
+  .modal .box{background:#fff;border-radius:16px;padding:22px;max-width:760px;width:100%;max-height:90vh;overflow:auto}
+  .shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .item{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+  .item .em{font-size:30px}.item b{display:block;font-size:13px;margin:4px 0}.item small{color:var(--muted)}
+  /* login */
+  #login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,var(--navy),#0d4a3a);padding:20px}
+  #login.off{display:none}
+  .lbox{background:#fff;border-radius:20px;padding:34px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+  .lbox h2{margin:10px 0 4px}.lbox p{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .lbox input{width:100%;margin-bottom:10px}
+  .demo{margin-top:14px;font-size:12px;color:var(--muted);background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px;line-height:1.8}
+  .demo a{color:var(--green);cursor:pointer;font-weight:600}
+  @media print{aside,.top,form.f,.btn,footer,.noprint{display:none!important}main{padding:0}.panel{box-shadow:none;border:0}}
 </style>
 </head>
 <body>
+
+<div id="login">
+  <div class="lbox">
+    <div class="logo" style="width:52px;height:52px;font-size:26px">👓</div>
+    <h2>Óptica Monte Alegre</h2><p>Acesse com seu usuário. Ambiente de demonstração.</p>
+    <form id="lf" autocomplete="off">
+      <input id="lu" placeholder="E-mail" required>
+      <input id="lp" type="password" placeholder="Senha" required>
+      <button class="btn" style="width:100%;padding:12px">Entrar</button>
+    </form>
+    <div class="demo"><b>Usuários fictícios</b> (clique para preencher):<br>
+      <a onclick="fill('admin@optica.demo','admin123')">Administrador</a> ·
+      <a onclick="fill('vendas@optica.demo','vendas123')">Vendedor</a> ·
+      <a onclick="fill('estoque@optica.demo','estoque123')">Estoquista</a></div>
+  </div>
+</div>
+
+<div id="app">
 <aside>
   <div class="brand"><div class="logo">👓</div><div><b>Óptica Monte Alegre</b><small>Sistema Integrado</small></div></div>
   <nav id="nav"></nav>
-  <div class="side-foot">Protótipo acadêmico<br>v1.0 · dados fictícios</div>
+  <div class="side-foot">Protótipo acadêmico<br>v2.0 · dados fictícios</div>
 </aside>
 <div class="content">
-  <div class="top"><div><h1 id="title">Painel</h1><p id="subtitle"></p></div><span class="pill">● Ambiente de demonstração</span></div>
-  <main>
-    <div class="cards" id="cards"></div>
-
-    <div class="panel" id="dash">
-      <div class="grid2">
-        <div><h3>Faturamento mensal</h3><p class="sub">Últimos 6 meses (R$)</p>
-          <div class="chart" id="bars"></div><div class="labels" id="labels"></div></div>
-        <div><h3>Produtos mais vendidos</h3><p class="sub">Ranking por quantidade</p><table id="top"></table></div>
-      </div>
-    </div>
-
-    <div class="panel" id="clientes"><h3>Clientes (CRM)</h3><p class="sub">Cadastro com consentimento LGPD obrigatório</p>
-      <form id="fc"><input name="nome" placeholder="Nome completo" required><input name="tel" placeholder="Telefone" required>
-        <label><input type="checkbox" name="lgpd" required> Consentimento LGPD</label><button class="btn">Cadastrar cliente</button></form>
-      <table id="tc"></table></div>
-
-    <div class="panel" id="estoque"><h3>Controle de estoque</h3><p class="sub">Alerta automático de estoque mínimo</p>
-      <form id="fe"><input name="sku" placeholder="SKU" required><input name="desc" placeholder="Descrição" required>
-        <input name="qtd" type="number" min="0" placeholder="Qtd" required style="width:90px"><input name="min" type="number" min="0" placeholder="Mínimo" required style="width:100px">
-        <input name="preco" type="number" step="0.01" min="0" placeholder="Preço R$" required style="width:120px"><button class="btn">Adicionar produto</button></form>
-      <table id="te"></table></div>
-
-    <div class="panel" id="vendas"><h3>Registro de vendas</h3><p class="sub">A venda baixa o estoque automaticamente</p>
-      <form id="fv"><select name="cli" id="scli"></select><select name="sku" id="sprod"></select>
-        <input name="qtd" type="number" min="1" value="1" required style="width:90px"><button class="btn">Registrar venda</button></form>
-      <table id="tv"></table></div>
-  </main>
+  <div class="top"><div><h1 id="title"></h1><p id="subtitle"></p></div>
+    <div class="user"><span class="pill" id="who"></span><button class="linkbtn" onclick="logout()">Sair</button></div></div>
+  <main id="view"></main>
   <footer>
     Protótipo acadêmico baseado no layout do painel Autoclipper, criado e gerenciado por <b>Jheison Douglas Souto</b>.
-    Em produção: Django + PostgreSQL, conforme o documento do Projeto Integrador.<br>
+    Em produção: Django + PostgreSQL, conforme o documento do Projeto Integrador. Todos os dados exibidos são fictícios.<br>
     <a href="https://github.com/TedKiller/autoclipper-dashboard/tree/main/optica-monte-alegre" target="_blank" rel="noopener">Código-fonte no GitHub ↗</a>
   </footer>
 </div>
+</div>
+<div class="modal" id="modal" onclick="if(event.target==this)closeModal()"><div class="box" id="mbox"></div></div>
 <div class="toast" id="toast"></div>
+
 <script>
-const KEY='optica_demo_v1';
-const seed={clientes:[{nome:'Maria Souza',tel:'(35) 99999-1111'},{nome:'João Pereira',tel:'(35) 98888-2222'}],
- estoque:[{sku:'ARM-001',desc:'Armação Acetato Preta',qtd:12,min:5,preco:289.9},{sku:'LEN-010',desc:'Lente Multifocal',qtd:4,min:6,preco:520},{sku:'SOL-005',desc:'Óculos de Sol Aviador',qtd:20,min:4,preco:349.9}],
- vendas:[],meses:[18200,21400,19800,24600,23100,26800]};
-let db=JSON.parse(localStorage.getItem(KEY)||'null')||seed;
-const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
-const R=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const $=id=>document.getElementById(id);
-const tabs={dash:['📊','Painel','Visão geral do negócio'],clientes:['👥','Clientes','Gestão de relacionamento'],estoque:['📦','Estoque','Produtos e níveis mínimos'],vendas:['🧾','Vendas','Registro e histórico']};
-let cur='dash';
-function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function render(){
-  $('nav').innerHTML=Object.entries(tabs).map(([k,v])=>`<button class="${k==cur?'on':''}" onclick="cur='${k}';render()"><span>${v[0]}</span>${v[1]}</button>`).join('');
-  $('title').textContent=tabs[cur][1];$('subtitle').textContent=tabs[cur][2];
-  document.querySelectorAll('.panel').forEach(s=>s.classList.toggle('on',s.id==cur));
-  const total=db.vendas.reduce((a,v)=>a+v.total,0),baixo=db.estoque.filter(p=>p.qtd<=p.min).length;
-  $('cards').innerHTML=[['','👥','Clientes',db.clientes.length],['blue','📦','Itens em estoque',db.estoque.reduce((a,p)=>a+p.qtd,0)],['warn','⚠️','Estoque baixo',baixo],['dark','💰','Vendas registradas',R(total)]]
-   .map(([c,i,a,b])=>`<div class="card ${c}"><div class="ico">${i}</div><div><small>${a}</small><b>${b}</b></div></div>`).join('');
-  const mx=Math.max(...db.meses);
-  $('bars').innerHTML=db.meses.map(v=>`<div class="col"><em>${(v/1000).toFixed(1)}k</em><div class="bar" style="height:${Math.round(v/mx*150)}px" title="${R(v)}"></div></div>`).join('');
-  $('labels').innerHTML=db.meses.map((_,i)=>`<span>Mês ${i+1}</span>`).join('');
-  const cnt={};db.vendas.forEach(v=>cnt[v.desc]=(cnt[v.desc]||0)+v.qtd);
-  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  $('top').innerHTML='<tr><th>Produto</th><th>Qtd</th></tr>'+(top.map(([n,q])=>`<tr><td>${n}</td><td>${q}</td></tr>`).join('')||'<tr><td colspan=2 class="empty">Sem vendas ainda</td></tr>');
-  $('tc').innerHTML='<tr><th>Nome</th><th>Telefone</th><th>LGPD</th></tr>'+db.clientes.map(c=>`<tr><td>${c.nome}</td><td>${c.tel}</td><td><span class="tag ok">Consentido</span></td></tr>`).join('');
-  $('te').innerHTML='<tr><th>SKU</th><th>Descrição</th><th>Qtd</th><th>Mín.</th><th>Preço</th><th>Status</th></tr>'+db.estoque.map(p=>`<tr><td>${p.sku}</td><td>${p.desc}</td><td>${p.qtd}</td><td>${p.min}</td><td>${R(p.preco)}</td><td><span class="tag ${p.qtd<=p.min?'low':'ok'}">${p.qtd<=p.min?'⚠ Repor':'Normal'}</span></td></tr>`).join('');
-  $('scli').innerHTML=db.clientes.map((c,i)=>`<option value="${i}">${c.nome}</option>`).join('');
-  $('sprod').innerHTML=db.estoque.map(p=>`<option value="${p.sku}">${p.desc} (${p.qtd} un.)</option>`).join('');
-  $('tv').innerHTML='<tr><th>Cliente</th><th>Produto</th><th>Qtd</th><th>Total</th></tr>'+(db.vendas.slice().reverse().map(v=>`<tr><td>${v.cli}</td><td>${v.desc}</td><td>${v.qtd}</td><td>${R(v.total)}</td></tr>`).join('')||'<tr><td colspan=4 class="empty">Nenhuma venda registrada</td></tr>');
+/* ============ BANCO DE DADOS (relacional simulado, espelha o schema.sql) ============ */
+const KEY='optica_db_v2';
+const USERS=[
+ {email:'admin@optica.demo',senha:'admin123',nome:'Carlos Admin',perfil:'admin'},
+ {email:'vendas@optica.demo',senha:'vendas123',nome:'Ana Vendedora',perfil:'vendedor'},
+ {email:'estoque@optica.demo',senha:'estoque123',nome:'Pedro Estoquista',perfil:'estoquista'}];
+const PERMS={admin:['dash','clientes','prescricoes','estoque','fornecedores','vendas','os','fiscal','ecom','db'],
+ vendedor:['dash','clientes','prescricoes','vendas','os','fiscal'],
+ estoquista:['dash','estoque','fornecedores','os']};
+const TABS={dash:['📊','Painel','Visão geral do negócio'],clientes:['👥','Clientes (CRM)','Cadastro com consentimento LGPD'],
+ prescricoes:['🩺','Prescrições','Receitas oftalmológicas dos clientes'],estoque:['📦','Estoque','Produtos e níveis mínimos'],
+ fornecedores:['🚚','Fornecedores','Cadastro e pedidos de compra'],vendas:['🧾','Vendas (PDV)','Registro de vendas e emissão fiscal'],
+ os:['🔧','Ordens de serviço','Acompanhamento no laboratório'],fiscal:['📄','Notas fiscais','Emissão fiscal simulada (NFC-e)'],
+ ecom:['🛒','E-commerce / API','API REST e loja virtual simulada'],db:['🗄️','Banco de dados','Tabelas, SQL e auditoria']};
+const OS_FLOW=['Aguardando laboratório','Em produção','Montagem','Pronto para retirada','Entregue'];
+
+function seedDB(){
+ const d={seq:{},users:USERS.map(({senha,...u})=>u),
+  clientes:[],prescricoes:[],fornecedores:[],produtos:[],vendas:[],notas:[],os:[],compras:[],log:[],
+  meses:[18200,21400,19800,24600,23100,0]};
+ const add=(t,o)=>{d.seq[t]=(d.seq[t]||0)+1;o.id=d.seq[t];d[t].push(o);return o};
+ [['Maria Souza','111.222.333-44','(35) 99999-1111','maria@email.demo'],['João Pereira','222.333.444-55','(35) 98888-2222','joao@email.demo'],
+  ['Fernanda Lima','333.444.555-66','(35) 97777-3333','fernanda@email.demo'],['Ricardo Alves','444.555.666-77','(35) 96666-4444','ricardo@email.demo']]
+  .forEach(([nome,cpf,tel,email])=>add('clientes',{nome,cpf,tel,email,lgpd:true,criado:'2026-09-10'}));
+ add('prescricoes',{cliente_id:1,data:'2026-10-05',medico:'Dr. Paulo Mendes (CRM-MG 12345)',odEsf:-1.5,odCil:-0.5,odEixo:90,oeEsf:-1.25,oeCil:-0.75,oeEixo:85,adicao:0,dp:62});
+ add('prescricoes',{cliente_id:2,data:'2026-10-18',medico:'Dra. Lúcia Prado (CRM-MG 23456)',odEsf:1.0,odCil:0,odEixo:0,oeEsf:1.25,oeCil:-0.25,oeEixo:10,adicao:2.0,dp:64});
+ [['Ótica Distribuidora Sul Ltda','12.345.678/0001-90','Marcos · (11) 3000-1000',7,'30 dias'],['Lentes Brasil S.A.','23.456.789/0001-01','Paula · (21) 3100-2000',10,'28 dias'],['Solaris Importadora','34.567.890/0001-12','Rafael · (31) 3200-3000',5,'À vista']]
+  .forEach(([razao,cnpj,contato,prazo,cond])=>add('fornecedores',{razao,cnpj,contato,prazo,cond}));
+ [['ARM-001','Armação Acetato Preta','Armação',1,150,289.9,12,5],['ARM-002','Armação Metal Dourada','Armação',1,180,329.9,8,4],['LEN-010','Lente Multifocal','Lente',2,260,520,4,6],
+  ['LEN-020','Lente Antirreflexo','Lente',2,90,190,25,8],['SOL-005','Óculos de Sol Aviador','Solar',3,170,349.9,20,4],['ACE-001','Estojo Rígido','Acessório',3,12,39.9,40,10]]
+  .forEach(([sku,desc,cat,forn_id,custo,preco,qtd,min])=>add('produtos',{sku,desc,cat,forn_id,custo,preco,qtd,min}));
+ return {d,add};
 }
-$('fc').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);db.clientes.push({nome:f.get('nome'),tel:f.get('tel')});save();e.target.reset();render();toast('Cliente cadastrado')};
-$('fe').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);db.estoque.push({sku:f.get('sku'),desc:f.get('desc'),qtd:+f.get('qtd'),min:+f.get('min'),preco:+f.get('preco')});save();e.target.reset();render();toast('Produto adicionado')};
-$('fv').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),p=db.estoque.find(x=>x.sku==f.get('sku')),q=+f.get('qtd');
-  if(q>p.qtd){toast('Estoque insuficiente!');return}
-  p.qtd-=q;db.vendas.push({cli:db.clientes[+f.get('cli')].nome,desc:p.desc,qtd:q,total:q*p.preco});save();render();toast('Venda registrada')};
-render();
+let db=JSON.parse(localStorage.getItem(KEY)||'null');
+function nextId(t){db.seq[t]=(db.seq[t]||0)+1;return db.seq[t]}
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function audit(acao,ent){db.log.push({id:nextId('log'),quando:new Date().toLocaleString('pt-BR'),usuario:session?session.email:'sistema',acao,entidade:ent})}
+
+/* ============ REGRAS DE NEGÓCIO ============ */
+const R=v=>(+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const byId=(t,id)=>db[t].find(x=>x.id==id);
+const cliNome=id=>byId('clientes',id)?.nome||'—';
+
+function emitirNota(venda){
+ let chave='';for(let i=0;i<44;i++)chave+=Math.floor(Math.random()*10);
+ const n={id:nextId('notas'),venda_id:venda.id,numero:1000+db.notas.length+1,serie:1,chave,status:'Autorizada (simulada)',data:venda.data,total:venda.total};
+ db.notas.push(n);venda.nota_id=n.id;return n;
+}
+function vender({cliente_id,canal,itens,pag,vendedor,prescricao_id,gerarOS,data}){
+ let total=0;
+ for(const it of itens){const p=byId('produtos',it.produto_id);if(!p)throw 'Produto inexistente';if(it.qtd>p.qtd)throw `Estoque insuficiente de "${p.desc}" (${p.qtd} un.)`;}
+ const itensV=itens.map(it=>{const p=byId('produtos',it.produto_id);p.qtd-=it.qtd;total+=p.preco*it.qtd;return{produto_id:p.id,qtd:it.qtd,preco:p.preco}});
+ const v={id:nextId('vendas'),data:data||new Date().toISOString().slice(0,10),cliente_id,canal,vendedor,pag,itens:itensV,total};
+ db.vendas.push(v);emitirNota(v);
+ if(gerarOS&&prescricao_id)db.os.push({id:nextId('os'),venda_id:v.id,prescricao_id:+prescricao_id,lab:'Laboratório Ótica Sul',status:OS_FLOW[0],previsao:new Date(Date.now()+7*864e5).toISOString().slice(0,10)});
+ audit('Venda #'+v.id+' ('+canal+')','venda');save();return v;
+}
+function initDB(){
+ if(db)return;
+ const {d}=seedDB();db=d;
+ vender({cliente_id:1,canal:'Loja física',itens:[{produto_id:1,qtd:1},{produto_id:4,qtd:2}],pag:'Pix',vendedor:'vendas@optica.demo',prescricao_id:1,gerarOS:true,data:'2026-10-20'});
+ vender({cliente_id:2,canal:'Loja física',itens:[{produto_id:3,qtd:1}],pag:'Cartão 3x',vendedor:'vendas@optica.demo',prescricao_id:2,gerarOS:true,data:'2026-10-25'});
+ vender({cliente_id:3,canal:'Site',itens:[{produto_id:5,qtd:1}],pag:'Pix',vendedor:'api',data:'2026-10-28'});
+ db.os[0].status='Pronto para retirada';db.log=[];audit('Carga inicial de dados fictícios','sistema');save();
+}
+
+/* ============ API REST SIMULADA (e-commerce) ============ */
+function api(method,path,body){
+ let m;
+ if(method=='GET'&&path=='/api/v1/produtos')return{status:200,json:db.produtos.map(p=>({sku:p.sku,descricao:p.desc,categoria:p.cat,preco:p.preco,disponivel:p.qtd>0}))};
+ if(method=='GET'&&(m=path.match(/^\/api\/v1\/produtos\/([^/]+)\/estoque$/))){const p=db.produtos.find(x=>x.sku==m[1]);return p?{status:200,json:{sku:p.sku,quantidade:p.qtd,estoque_minimo:p.min}}:{status:404,json:{erro:'SKU não encontrado'}}}
+ if(method=='GET'&&path=='/api/v1/pedidos')return{status:200,json:db.vendas.filter(v=>v.canal=='Site').map(v=>({pedido:v.id,data:v.data,total:v.total,nota:db.notas.find(n=>n.id==v.nota_id)?.numero}))};
+ if(method=='POST'&&path=='/api/v1/pedidos'){
+  try{const itens=(body.itens||[]).map(i=>{const p=db.produtos.find(x=>x.sku==i.sku);if(!p)throw 'SKU inválido: '+i.sku;return{produto_id:p.id,qtd:+i.qtd||1}});
+   if(!itens.length)throw 'Pedido sem itens';
+   const v=vender({cliente_id:body.cliente_id||1,canal:'Site',itens,pag:body.pagamento||'Pix',vendedor:'api'});
+   return{status:201,json:{pedido:v.id,total:v.total,nota_fiscal:db.notas.find(n=>n.id==v.nota_id).numero,status:'confirmado'}}}
+  catch(e){return{status:422,json:{erro:String(e)}}}}
+ return{status:404,json:{erro:'Rota não encontrada'}};
+}
+
+/* ============ EXPORTAÇÃO ============ */
+function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function csv(name,rows){const body=rows.map(r=>r.map(c=>'"'+String(c??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');download(name+'.csv','\ufeff'+body,'text/csv;charset=utf-8');toast('Arquivo '+name+'.csv exportado');audit('Exportou '+name+'.csv','relatório');save()}
+const EXPORTS={
+ vendas:()=>[['ID','Data','Cliente','Canal','Pagamento','Itens','Total']].concat(db.vendas.map(v=>[v.id,v.data,cliNome(v.cliente_id),v.canal,v.pag,v.itens.map(i=>byId('produtos',i.produto_id).desc+' x'+i.qtd).join(' | '),v.total.toFixed(2).replace('.',',')])),
+ estoque:()=>[['SKU','Descrição','Categoria','Fornecedor','Custo','Preço','Qtd','Mínimo','Status']].concat(db.produtos.map(p=>[p.sku,p.desc,p.cat,byId('fornecedores',p.forn_id)?.razao,p.custo,p.preco,p.qtd,p.min,p.qtd<=p.min?'Repor':'Normal'])),
+ clientes:()=>[['ID','Nome','CPF','Telefone','E-mail','LGPD']].concat(db.clientes.map(c=>[c.id,c.nome,c.cpf,c.tel,c.email,c.lgpd?'Sim':'Não'])),
+ fornecedores:()=>[['ID','Razão social','CNPJ','Contato','Prazo (dias)','Pagamento']].concat(db.fornecedores.map(f=>[f.id,f.razao,f.cnpj,f.contato,f.prazo,f.cond])),
+ notas:()=>[['Número','Série','Chave de acesso','Venda','Total','Status']].concat(db.notas.map(n=>[n.numero,n.serie,n.chave,n.venda_id,n.total.toFixed(2).replace('.',','),n.status])),
+};
+const expBtn=k=>`<button class="btn sec sm noprint" onclick="csv('${k}',EXPORTS.${k}())">⬇ Exportar CSV</button>`;
+const printBtn=`<button class="btn sec sm noprint" onclick="window.print()">🖨 Imprimir / PDF</button>`;
+
+/* ============ SQL (schema + inserts) ============ */
+const SCHEMA=`-- Óptica Monte Alegre · PostgreSQL
+CREATE TABLE cliente (id SERIAL PRIMARY KEY, nome VARCHAR(120) NOT NULL, cpf VARCHAR(14) UNIQUE NOT NULL, telefone VARCHAR(20), email VARCHAR(120), consentimento_lgpd BOOLEAN NOT NULL DEFAULT FALSE, criado_em DATE DEFAULT CURRENT_DATE);
+CREATE TABLE prescricao (id SERIAL PRIMARY KEY, cliente_id INT NOT NULL REFERENCES cliente(id) ON DELETE RESTRICT, data_receita DATE, medico VARCHAR(120), od_esf NUMERIC(4,2), od_cil NUMERIC(4,2), od_eixo INT, oe_esf NUMERIC(4,2), oe_cil NUMERIC(4,2), oe_eixo INT, adicao NUMERIC(3,2), dp INT);
+CREATE TABLE fornecedor (id SERIAL PRIMARY KEY, razao_social VARCHAR(150) NOT NULL, cnpj VARCHAR(18) UNIQUE NOT NULL, contato VARCHAR(120), prazo_entrega INT, condicoes_pagamento VARCHAR(60));
+CREATE TABLE produto (id SERIAL PRIMARY KEY, sku VARCHAR(20) UNIQUE NOT NULL, descricao VARCHAR(150) NOT NULL, categoria VARCHAR(40), fornecedor_id INT REFERENCES fornecedor(id), preco_custo NUMERIC(10,2) CHECK (preco_custo>=0), preco_venda NUMERIC(10,2) CHECK (preco_venda>=0), quantidade INT NOT NULL CHECK (quantidade>=0), estoque_minimo INT NOT NULL DEFAULT 0);
+CREATE TABLE venda (id SERIAL PRIMARY KEY, data_venda DATE NOT NULL, cliente_id INT REFERENCES cliente(id), canal VARCHAR(20) NOT NULL, pagamento VARCHAR(30), vendedor VARCHAR(120), total NUMERIC(12,2) NOT NULL);
+CREATE TABLE item_venda (id SERIAL PRIMARY KEY, venda_id INT NOT NULL REFERENCES venda(id), produto_id INT NOT NULL REFERENCES produto(id), quantidade INT NOT NULL CHECK (quantidade>0), preco_unitario NUMERIC(10,2) NOT NULL);
+CREATE TABLE nota_fiscal (id SERIAL PRIMARY KEY, venda_id INT UNIQUE NOT NULL REFERENCES venda(id), numero INT NOT NULL, serie INT NOT NULL, chave_acesso CHAR(44) UNIQUE NOT NULL, status VARCHAR(40));
+CREATE TABLE ordem_servico (id SERIAL PRIMARY KEY, venda_id INT NOT NULL REFERENCES venda(id), prescricao_id INT REFERENCES prescricao(id), laboratorio VARCHAR(80), status VARCHAR(40), previsao_entrega DATE);
+CREATE TABLE log_auditoria (id SERIAL PRIMARY KEY, quando TIMESTAMP DEFAULT now(), usuario VARCHAR(120), acao VARCHAR(200), entidade VARCHAR(40));
+CREATE INDEX idx_cliente_cpf ON cliente(cpf); CREATE INDEX idx_venda_data ON venda(data_venda);
+`;
+const q=v=>v==null?'NULL':typeof v=='number'?v:"'"+String(v).replace(/'/g,"''")+"'";
+function dumpSQL(){
+ let s=SCHEMA+'\n-- Dados fictícios\n';
+ db.clientes.forEach(c=>s+=`INSERT INTO cliente VALUES (${c.id},${q(c.nome)},${q(c.cpf)},${q(c.tel)},${q(c.email)},${c.lgpd},${q(c.criado)});\n`);
+ db.prescricoes.forEach(p=>s+=`INSERT INTO prescricao VALUES (${p.id},${p.cliente_id},${q(p.data)},${q(p.medico)},${p.odEsf},${p.odCil},${p.odEixo},${p.oeEsf},${p.oeCil},${p.oeEixo},${p.adicao},${p.dp});\n`);
+ db.fornecedores.forEach(f=>s+=`INSERT INTO fornecedor VALUES (${f.id},${q(f.razao)},${q(f.cnpj)},${q(f.contato)},${f.prazo},${q(f.cond)});\n`);
+ db.produtos.forEach(p=>s+=`INSERT INTO produto VALUES (${p.id},${q(p.sku)},${q(p.desc)},${q(p.cat)},${p.forn_id},${p.custo},${p.preco},${p.qtd},${p.min});\n`);
+ db.vendas.forEach(v=>{s+=`INSERT INTO venda VALUES (${v.id},${q(v.data)},${v.cliente_id},${q(v.canal)},${q(v.pag)},${q(v.vendedor)},${v.total});\n`;v.itens.forEach(i=>s+=`INSERT INTO item_venda (venda_id,produto_id,quantidade,preco_unitario) VALUES (${v.id},${i.produto_id},${i.qtd},${i.preco});\n`)});
+ db.notas.forEach(n=>s+=`INSERT INTO nota_fiscal VALUES (${n.id},${n.venda_id},${n.numero},${n.serie},${q(n.chave)},${q(n.status)});\n`);
+ db.os.forEach(o=>s+=`INSERT INTO ordem_servico VALUES (${o.id},${o.venda_id},${o.prescricao_id},${q(o.lab)},${q(o.status)},${q(o.previsao)});\n`);
+ return s;
+}
+
+/* ============ UI ============ */
+let session=JSON.parse(sessionStorage.getItem('optica_session')||'null'),cur='dash';
+const tbl=(h,rows,empty='Nenhum registro')=>`<div class="tw"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.join('')||`<tr><td colspan="${h.length}" class="empty">${empty}</td></tr>`}</table></div>`;
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function closeModal(){$('modal').classList.remove('on')}
+function openModal(h){$('mbox').innerHTML=h;$('modal').classList.add('on')}
+function fill(u,p){$('lu').value=u;$('lp').value=p}
+$('lf').onsubmit=e=>{e.preventDefault();const u=USERS.find(x=>x.email==$('lu').value.trim()&&x.senha==$('lp').value);
+ if(!u){toast('Usuário ou senha inválidos');return}
+ session={email:u.email,nome:u.nome,perfil:u.perfil};sessionStorage.setItem('optica_session',JSON.stringify(session));audit('Login','sessão');save();cur='dash';start()};
+function logout(){audit('Logout','sessão');save();sessionStorage.removeItem('optica_session');session=null;start()}
+function go(t){cur=t;render()}
+function start(){
+ initDB();
+ $('login').classList.toggle('off',!!session);$('app').classList.toggle('on',!!session);
+ if(session)render();
+}
+function render(){
+ const allowed=PERMS[session.perfil];if(!allowed.includes(cur))cur='dash';
+ $('nav').innerHTML=allowed.map(k=>`<button class="${k==cur?'on':''}" onclick="go('${k}')"><span>${TABS[k][0]}</span>${TABS[k][1]}</button>`).join('');
+ $('title').textContent=TABS[cur][1];$('subtitle').textContent=TABS[cur][2];
+ $('who').textContent=session.nome+' · '+session.perfil;
+ $('view').innerHTML=VIEWS[cur]();
+ window.scrollTo(0,0);
+}
+const prodOpts=()=>db.produtos.map(p=>`<option value="${p.id}">${esc(p.desc)} (${p.qtd} un. · ${R(p.preco)})</option>`).join('');
+const cliOpts=()=>db.clientes.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+const fornOpts=()=>db.fornecedores.map(f=>`<option value="${f.id}">${esc(f.razao)}</option>`).join('');
+const stTag=s=>`<span class="tag ${s=='Entregue'?'ok':s=='Pronto para retirada'?'info':'wait'}">${s}</span>`;
+
+const VIEWS={
+ dash(){
+  const total=db.vendas.reduce((a,v)=>a+v.total,0),baixo=db.produtos.filter(p=>p.qtd<=p.min).length,abertas=db.os.filter(o=>o.status!='Entregue').length;
+  const meses=db.meses.slice();meses[5]=total;const mx=Math.max(...meses);
+  const cnt={};db.vendas.forEach(v=>v.itens.forEach(i=>{const n=byId('produtos',i.produto_id).desc;cnt[n]=(cnt[n]||0)+i.qtd}));
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const card=(c,i,a,b)=>`<div class="card ${c}"><div class="ico">${i}</div><div><small>${a}</small><b>${b}</b></div></div>`;
+  return `<div class="cards">${card('','👥','Clientes',db.clientes.length)+card('blue','📦','Itens em estoque',db.produtos.reduce((a,p)=>a+p.qtd,0))+card('warn','⚠️','Estoque baixo',baixo)+card('dark','💰','Vendas registradas',R(total))+card('blue','🔧','OS em andamento',abertas)}</div>
+  <div class="panel"><div class="head"><div><h3>Relatórios gerenciais</h3><p class="sub">Exportação para CSV ou impressão/PDF</p></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap">${expBtn('vendas')}${expBtn('estoque')}${expBtn('clientes')}${expBtn('fornecedores')}${printBtn}</div></div>
+   <div class="grid2"><div><h3 style="font-size:14px">Faturamento mensal (R$)</h3><div class="chart">${meses.map(v=>`<div class="col"><em>${(v/1000).toFixed(1)}k</em><div class="bar" style="height:${Math.max(4,Math.round(v/mx*150))}px" title="${R(v)}"></div></div>`).join('')}</div>
+    <div class="labels">${meses.map((_,i)=>`<span>${i==5?'Atual':'Mês '+(i+1)}</span>`).join('')}</div></div>
+   <div><h3 style="font-size:14px;margin-bottom:8px">Produtos mais vendidos</h3>${tbl(['Produto','Qtd'],top.map(([n,qt])=>`<tr><td>${esc(n)}</td><td>${qt}</td></tr>`),'Sem vendas ainda')}</div></div></div>`;
+ },
+ clientes(){
+  return `<div class="panel"><h3>Novo cliente</h3><p class="sub">O consentimento LGPD é obrigatório (art. 7º e 11 da Lei 13.709/2018)</p>
+  <form class="f" onsubmit="addCliente(event)"><input name="nome" placeholder="Nome completo" required><input name="cpf" placeholder="CPF" required><input name="tel" placeholder="Telefone" required><input name="email" type="email" placeholder="E-mail">
+   <label class="ck"><input type="checkbox" name="lgpd" required> Consentimento LGPD</label><button class="btn">Cadastrar</button></form>
+  <div class="head"><h3>Clientes cadastrados</h3>${expBtn('clientes')}</div>
+  ${tbl(['ID','Nome','CPF','Telefone','E-mail','Prescrições','LGPD'],db.clientes.map(c=>`<tr><td>${c.id}</td><td>${esc(c.nome)}</td><td>${esc(c.cpf)}</td><td>${esc(c.tel)}</td><td>${esc(c.email)}</td><td>${db.prescricoes.filter(p=>p.cliente_id==c.id).length}</td><td><span class="tag ok">Consentido</span></td></tr>`))}</div>`;
+ },
+ prescricoes(){
+  const n=(name,ph)=>`<label class="fl">${ph}<input name="${name}" type="number" step="0.25" required style="width:84px"></label>`;
+  return `<div class="panel"><h3>Nova prescrição</h3><p class="sub">Dado sensível de saúde (LGPD): acesso restrito por perfil</p>
+  <form class="f" onsubmit="addPresc(event)"><label class="fl">Cliente<select name="cliente_id" required>${cliOpts()}</select></label>
+   <label class="fl">Data<input name="data" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>
+   <label class="fl">Médico / CRM<input name="medico" required placeholder="Dr. Nome (CRM)"></label>
+   ${n('odEsf','OD esférico')}${n('odCil','OD cilíndrico')}${n('odEixo','OD eixo')}${n('oeEsf','OE esférico')}${n('oeCil','OE cilíndrico')}${n('oeEixo','OE eixo')}${n('adicao','Adição')}${n('dp','DP (mm)')}
+   <button class="btn">Salvar prescrição</button></form>
+  <h3>Prescrições registradas</h3>
+  ${tbl(['ID','Cliente','Data','Médico','OD (esf/cil/eixo)','OE (esf/cil/eixo)','Adição','DP'],db.prescricoes.map(p=>`<tr><td>${p.id}</td><td>${esc(cliNome(p.cliente_id))}</td><td>${p.data}</td><td>${esc(p.medico)}</td><td>${p.odEsf} / ${p.odCil} / ${p.odEixo}°</td><td>${p.oeEsf} / ${p.oeCil} / ${p.oeEixo}°</td><td>${p.adicao}</td><td>${p.dp}</td></tr>`))}</div>`;
+ },
+ estoque(){
+  const podeCad=['admin','estoquista'].includes(session.perfil);
+  return `<div class="panel"><h3>Novo produto</h3><p class="sub">Alerta automático de estoque mínimo</p>
+  <form class="f" onsubmit="addProd(event)"><input name="sku" placeholder="SKU" required style="width:100px"><input name="desc" placeholder="Descrição" required>
+   <select name="cat"><option>Armação</option><option>Lente</option><option>Solar</option><option>Acessório</option></select><select name="forn_id">${fornOpts()}</select>
+   <input name="custo" type="number" step="0.01" min="0" placeholder="Custo" required style="width:100px"><input name="preco" type="number" step="0.01" min="0" placeholder="Preço" required style="width:100px">
+   <input name="qtd" type="number" min="0" placeholder="Qtd" required style="width:80px"><input name="min" type="number" min="0" placeholder="Mín." required style="width:80px"><button class="btn">Adicionar</button></form>
+  <div class="head"><h3>Produtos em estoque</h3>${expBtn('estoque')}</div>
+  ${tbl(['SKU','Descrição','Categoria','Fornecedor','Custo','Preço','Qtd','Mín.','Status'],db.produtos.map(p=>`<tr><td>${esc(p.sku)}</td><td>${esc(p.desc)}</td><td>${esc(p.cat)}</td><td>${esc(byId('fornecedores',p.forn_id)?.razao)}</td><td>${R(p.custo)}</td><td>${R(p.preco)}</td><td>${p.qtd}</td><td>${p.min}</td><td><span class="tag ${p.qtd<=p.min?'low':'ok'}">${p.qtd<=p.min?'⚠ Repor':'Normal'}</span></td></tr>`))}</div>`;
+ },
+ fornecedores(){
+  return `<div class="grid3"><div class="panel"><h3>Novo fornecedor</h3><p class="sub">Contratos e condições de fornecimento</p>
+   <form class="f" onsubmit="addForn(event)"><input name="razao" placeholder="Razão social" required><input name="cnpj" placeholder="CNPJ" required><input name="contato" placeholder="Contato" required>
+    <input name="prazo" type="number" min="0" placeholder="Prazo (dias)" required style="width:120px"><input name="cond" placeholder="Cond. pagamento" required><button class="btn">Cadastrar</button></form></div>
+  <div class="panel"><h3>Pedido de compra</h3><p class="sub">Dá entrada no estoque e registra o histórico</p>
+   <form class="f" onsubmit="addCompra(event)"><select name="forn_id">${fornOpts()}</select><select name="produto_id">${prodOpts()}</select>
+    <input name="qtd" type="number" min="1" placeholder="Qtd" required style="width:90px"><button class="btn">Receber mercadoria</button></form></div></div>
+  <div class="panel"><div class="head"><h3>Fornecedores</h3>${expBtn('fornecedores')}</div>
+  ${tbl(['ID','Razão social','CNPJ','Contato','Prazo','Pagamento','Produtos'],db.fornecedores.map(f=>`<tr><td>${f.id}</td><td>${esc(f.razao)}</td><td>${esc(f.cnpj)}</td><td>${esc(f.contato)}</td><td>${f.prazo} dias</td><td>${esc(f.cond)}</td><td>${db.produtos.filter(p=>p.forn_id==f.id).length}</td></tr>`))}
+  <h3 style="margin-top:20px">Histórico de compras</h3>${tbl(['Data','Fornecedor','Produto','Qtd','Valor'],db.compras.slice().reverse().map(c=>`<tr><td>${c.data}</td><td>${esc(byId('fornecedores',c.forn_id)?.razao)}</td><td>${esc(byId('produtos',c.produto_id)?.desc)}</td><td>${c.qtd}</td><td>${R(c.valor)}</td></tr>`),'Nenhuma compra registrada')}</div>`;
+ },
+ vendas(){
+  return `<div class="panel"><h3>Nova venda</h3><p class="sub">Baixa o estoque, emite a nota fiscal (simulada) e pode abrir ordem de serviço</p>
+  <form class="f" onsubmit="addVenda(event)"><label class="fl">Cliente<select name="cliente_id" id="vcli" onchange="refreshPresc()">${cliOpts()}</select></label>
+   <label class="fl">Produto<select name="produto_id">${prodOpts()}</select></label><label class="fl">Qtd<input name="qtd" type="number" min="1" value="1" required style="width:80px"></label>
+   <label class="fl">Pagamento<select name="pag"><option>Pix</option><option>Cartão 1x</option><option>Cartão 3x</option><option>Dinheiro</option></select></label>
+   <label class="fl">Prescrição (opcional)<select name="prescricao_id" id="vpresc"></select></label>
+   <label class="ck"><input type="checkbox" name="gerarOS"> Gerar ordem de serviço</label><button class="btn">Registrar venda</button></form>
+  <div class="head"><h3>Histórico de vendas</h3><div style="display:flex;gap:8px">${expBtn('vendas')}${printBtn}</div></div>
+  ${tbl(['#','Data','Cliente','Canal','Itens','Pagamento','Total','NF'],db.vendas.slice().reverse().map(v=>`<tr><td>${v.id}</td><td>${v.data}</td><td>${esc(cliNome(v.cliente_id))}</td><td>${esc(v.canal)}</td><td>${v.itens.map(i=>esc(byId('produtos',i.produto_id).desc)+' ×'+i.qtd).join('<br>')}</td><td>${esc(v.pag)}</td><td>${R(v.total)}</td><td><button class="btn sec sm" onclick="verNota(${v.nota_id})">NF ${db.notas.find(n=>n.id==v.nota_id)?.numero}</button></td></tr>`))}</div>`;
+ },
+ os(){
+  return `<div class="panel"><h3>Ordens de serviço</h3><p class="sub">Venda → laboratório → montagem → pronto → entregue</p>
+  ${tbl(['OS','Venda','Cliente','Laboratório','Previsão','Status','Ação'],db.os.map(o=>{const v=byId('vendas',o.venda_id),i=OS_FLOW.indexOf(o.status);
+   return `<tr><td>#${o.id}</td><td>#${o.venda_id}</td><td>${esc(cliNome(v.cliente_id))}</td><td>${esc(o.lab)}</td><td>${o.previsao}</td><td>${stTag(o.status)}</td><td>${i<OS_FLOW.length-1?`<button class="btn sm" onclick="avancaOS(${o.id})">Avançar → ${OS_FLOW[i+1]}</button>`:'—'}</td></tr>`}),'Nenhuma ordem de serviço')}</div>`;
+ },
+ fiscal(){
+  return `<div class="panel"><div class="head"><div><h3>Notas fiscais emitidas</h3><p class="sub">Simulação de NFC-e: sem transmissão real à SEFAZ. Em produção, usar emissor homologado.</p></div>${expBtn('notas')}</div>
+  ${tbl(['Número','Série','Venda','Total','Status','Documento'],db.notas.slice().reverse().map(n=>`<tr><td>${n.numero}</td><td>${n.serie}</td><td>#${n.venda_id}</td><td>${R(n.total)}</td><td><span class="tag ok">${n.status}</span></td><td><button class="btn sec sm" onclick="verNota(${n.id})">Ver XML / DANFE</button></td></tr>`))}</div>`;
+ },
+ ecom(){
+  return `<div class="grid3"><div class="panel"><h3>Loja virtual (simulada)</h3><p class="sub">Cada compra chama a API <code>POST /api/v1/pedidos</code> e usa o mesmo estoque da loja física</p>
+   <div class="shop">${db.produtos.map(p=>`<div class="item"><div class="em">${p.cat=='Lente'?'🔍':p.cat=='Solar'?'🕶️':p.cat=='Acessório'?'🧰':'👓'}</div><b>${esc(p.desc)}</b><small>${R(p.preco)} · ${p.qtd} un.</small><br><button class="btn sm" style="margin-top:8px" ${p.qtd?'':'disabled'} onclick="comprarSite('${p.sku}')">Comprar</button></div>`).join('')}</div></div>
+  <div class="panel"><h3>Console da API REST</h3><p class="sub">Teste os endpoints. Resposta em JSON.</p>
+   <form class="f" onsubmit="callApi(event)"><select name="route" id="route" onchange="routeChange()">
+    <option value="GET /api/v1/produtos">GET /api/v1/produtos</option><option value="GET /api/v1/produtos/ARM-001/estoque">GET /api/v1/produtos/{sku}/estoque</option>
+    <option value="GET /api/v1/pedidos">GET /api/v1/pedidos</option><option value="POST /api/v1/pedidos">POST /api/v1/pedidos</option></select><button class="btn">Executar</button>
+    <textarea id="reqbody" rows="4" style="width:100%;display:none;font-family:monospace;font-size:12px">{"cliente_id":1,"pagamento":"Pix","itens":[{"sku":"ARM-001","qtd":1}]}</textarea></form>
+   <pre id="apiout">// Clique em Executar</pre></div></div>`;
+ },
+ db(){
+  const tabelas=['clientes','prescricoes','fornecedores','produtos','vendas','notas','os','compras','log'];
+  return `<div class="panel"><div class="head"><div><h3>Banco de dados relacional (simulado)</h3><p class="sub">Tabelas com chaves primárias e estrangeiras, iguais ao modelo PostgreSQL do documento. Persistidas no navegador.</p></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sec sm" onclick="download('schema.sql',SCHEMA,'text/plain')">⬇ schema.sql</button><button class="btn sec sm" onclick="download('dados_ficticios.sql',dumpSQL(),'text/plain')">⬇ Dump SQL completo</button><button class="btn danger sm" onclick="resetDB()">Restaurar dados fictícios</button></div></div>
+   ${tbl(['Tabela','Registros','Colunas'],tabelas.map(t=>`<tr><td><code>${t}</code></td><td>${db[t].length}</td><td>${db[t][0]?Object.keys(db[t][0]).join(', '):'—'}</td></tr>`))}</div>
+  <div class="panel"><h3>Trilha de auditoria (LGPD)</h3><p class="sub">Quem fez o quê e quando</p>
+   ${tbl(['Quando','Usuário','Ação','Entidade'],db.log.slice().reverse().slice(0,40).map(l=>`<tr><td>${l.quando}</td><td>${esc(l.usuario)}</td><td>${esc(l.acao)}</td><td>${esc(l.entidade)}</td></tr>`))}</div>`;
+ }
+};
+
+/* ============ AÇÕES ============ */
+const fd=e=>{e.preventDefault();return Object.fromEntries(new FormData(e.target))};
+function addCliente(e){const f=fd(e);db.clientes.push({id:nextId('clientes'),nome:f.nome,cpf:f.cpf,tel:f.tel,email:f.email,lgpd:true,criado:new Date().toISOString().slice(0,10)});audit('Cadastro de cliente '+f.nome,'cliente');save();render();toast('Cliente cadastrado')}
+function addPresc(e){const f=fd(e);const p={id:nextId('prescricoes'),cliente_id:+f.cliente_id,data:f.data,medico:f.medico};['odEsf','odCil','odEixo','oeEsf','oeCil','oeEixo','adicao','dp'].forEach(k=>p[k]=+f[k]);db.prescricoes.push(p);audit('Prescrição para cliente #'+f.cliente_id,'prescricao');save();render();toast('Prescrição salva')}
+function addProd(e){const f=fd(e);db.produtos.push({id:nextId('produtos'),sku:f.sku,desc:f.desc,cat:f.cat,forn_id:+f.forn_id,custo:+f.custo,preco:+f.preco,qtd:+f.qtd,min:+f.min});audit('Produto '+f.sku,'produto');save();render();toast('Produto adicionado')}
+function addForn(e){const f=fd(e);db.fornecedores.push({id:nextId('fornecedores'),razao:f.razao,cnpj:f.cnpj,contato:f.contato,prazo:+f.prazo,cond:f.cond});audit('Fornecedor '+f.razao,'fornecedor');save();render();toast('Fornecedor cadastrado')}
+function addCompra(e){const f=fd(e),p=byId('produtos',f.produto_id),qt=+f.qtd;p.qtd+=qt;db.compras.push({id:nextId('compras'),forn_id:+f.forn_id,produto_id:p.id,qtd:qt,valor:qt*p.custo,data:new Date().toISOString().slice(0,10)});audit('Compra de '+qt+'x '+p.sku,'compra');save();render();toast('Entrada de estoque registrada')}
+function addVenda(e){const f=fd(e);try{const v=vender({cliente_id:+f.cliente_id,canal:'Loja física',itens:[{produto_id:+f.produto_id,qtd:+f.qtd}],pag:f.pag,vendedor:session.email,prescricao_id:f.prescricao_id,gerarOS:!!f.gerarOS});
+ if(f.gerarOS&&!f.prescricao_id)toast('Venda registrada (OS não criada: selecione uma prescrição)');else toast('Venda #'+v.id+' registrada · NF emitida');render()}catch(er){toast(String(er))}}
+function refreshPresc(){const c=$('vcli').value;$('vpresc').innerHTML='<option value="">— sem prescrição —</option>'+db.prescricoes.filter(p=>p.cliente_id==c).map(p=>`<option value="${p.id}">#${p.id} · ${p.data}</option>`).join('')}
+function avancaOS(id){const o=byId('os',id);o.status=OS_FLOW[OS_FLOW.indexOf(o.status)+1];audit('OS #'+id+' → '+o.status,'os');save();render();toast('OS atualizada')}
+function verNota(id){
+ const n=byId('notas',id),v=byId('vendas',n.venda_id),c=byId('clientes',v.cliente_id);
+ const xml=`<?xml version="1.0" encoding="UTF-8"?>\n<NFe ambiente="homologacao-simulada">\n <infNFe Id="NFe${n.chave}">\n  <ide><mod>65</mod><serie>${n.serie}</serie><nNF>${n.numero}</nNF><dhEmi>${v.data}</dhEmi></ide>\n  <emit><xNome>Óptica Monte Alegre Ltda</xNome><CNPJ>00.000.000/0001-00</CNPJ></emit>\n  <dest><xNome>${esc(c?.nome)}</xNome><CPF>${esc(c?.cpf)}</CPF></dest>\n${v.itens.map((i,k)=>{const p=byId('produtos',i.produto_id);return `  <det nItem="${k+1}"><prod><cProd>${p.sku}</cProd><xProd>${esc(p.desc)}</xProd><qCom>${i.qtd}</qCom><vUnCom>${i.preco.toFixed(2)}</vUnCom></prod></det>`}).join('\n')}\n  <total><vNF>${v.total.toFixed(2)}</vNF></total>\n  <pag><tPag>${esc(v.pag)}</tPag></pag>\n </infNFe>\n <protNFe><xMotivo>${n.status} - sem valor fiscal</xMotivo></protNFe>\n</NFe>`;
+ openModal(`<h3>NFC-e nº ${n.numero} · série ${n.serie}</h3><p class="sub">Chave de acesso: <code>${n.chave}</code><br>Documento simulado, sem valor fiscal.</p><pre>${xml.replace(/</g,'&lt;')}</pre>
+  <div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick='download("NFe${n.chave}.xml",${JSON.stringify(xml)},"text/xml")'>⬇ Baixar XML</button><button class="btn sec" onclick="closeModal()">Fechar</button></div>`);
+}
+function routeChange(){const r=$('route').value;$('reqbody').style.display=r.startsWith('POST')?'block':'none'}
+function callApi(e){e.preventDefault();const [m,p]=$('route').value.split(' ');let body;
+ if(m=='POST'){try{body=JSON.parse($('reqbody').value)}catch{ $('apiout').textContent='JSON inválido';return}}
+ const r=api(m,p,body);$('apiout').textContent=`${m} ${p}\nHTTP ${r.status}\n\n`+JSON.stringify(r.json,null,2);save();if(m=='POST')render2()}
+function render2(){const o=$('apiout').textContent;render();$('apiout').textContent=o}
+function comprarSite(sku){const r=api('POST','/api/v1/pedidos',{cliente_id:1,pagamento:'Pix',itens:[{sku,qtd:1}]});toast(r.status==201?`Pedido #${r.json.pedido} confirmado · NF ${r.json.nota_fiscal}`:r.json.erro);render()}
+function resetDB(){if(!confirm('Restaurar todos os dados fictícios?'))return;db=null;localStorage.removeItem(KEY);initDB();toast('Dados restaurados');render()}
+const _render=render;render=function(){_render();if(cur=='vendas')refreshPresc();};
+start();
 </script>
 </body>
 </html>
